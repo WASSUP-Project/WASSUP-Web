@@ -1,0 +1,17 @@
+.textButton {
+    padding: 8px 16px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    cursor: pointer;
+    background: none;
+    color: black;
+    border: none;
+}
+
+.textButton:hover {
+    font-weight: 600;
+}
