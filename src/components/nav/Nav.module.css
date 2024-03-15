@@ -1,0 +1,62 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 233px;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.logo {
+    width: 111px;
+    height: 24px;
+
+    font-family: 'Istok Web';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 24px;
+    letter-spacing: -0.06em;
+    color: #1D2830;
+}
+
+.navItems {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 95px;
+}
+
+.navItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.navItem:hover {
+    font-weight: 600;
+}
+
+.navItemText {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    color: #35414B;
+}
+
+.navItemIcon {
+    width: 14px;
+    height: 8px;
+    background: #FFFFFF;
+}
+
+.auth {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

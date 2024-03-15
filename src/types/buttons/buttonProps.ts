@@ -1,0 +1,3 @@
+type ButtonProps = {
+  text: string;
+};
