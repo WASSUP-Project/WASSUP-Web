@@ -60,3 +60,11 @@
     flex-direction: row;
     gap: 10px;
 }
+
+.authItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
