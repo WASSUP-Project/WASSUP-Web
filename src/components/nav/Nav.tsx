@@ -3,6 +3,11 @@ import styles from "./Nav.module.css";
 import PositiveButton from "../buttons/PositiveButton";
 import TextButton from "../buttons/TextButton";
 
+type navProps = {
+  text: string;
+  positiveText: string;
+};
+
 function Nav(props: navProps) {
   return (
     <div className={styles.header}>
