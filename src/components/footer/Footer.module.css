@@ -1,0 +1,44 @@
+.footer {
+    width: 100%;
+    background-color: #1d2830;
+    padding: 20px;
+}
+
+.title {
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.subTitle {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.frameContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 3rem;
+    padding: 3rem;
+}
+
+.frame {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    align-items: flex-start;
+    gap: 20px;
+    width: 25%;
+}
+
+.copyRightContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.copyRight {
+    color: #d9dbe1;
+    font-size: 12px;
+}
