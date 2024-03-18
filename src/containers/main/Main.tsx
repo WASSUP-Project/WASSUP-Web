@@ -1,7 +1,8 @@
 import Spacer from "@/components/Spacer";
 import PositiveButton from "@/components/buttons/PositiveButton";
+import Footer from "@/components/footer/Footer";
 import Nav from "@/components/nav/Nav";
-import styles from "@/styles/main/Main.module.css";
+import styles from "./Main.module.css";
 import Image from "next/image";
 
 export default function Main() {
@@ -59,6 +60,21 @@ export default function Main() {
             ></Image>
           </div>
         </div>
+
+        <Spacer />
+
+        <div className={styles.mainContainer_gray}>
+          <div className={styles.banner}>
+            <Image
+              src="/image2.png"
+              alt="Image of something relevant"
+              width={1000}
+              height={200}
+            ></Image>
+          </div>
+        </div>
+
+        <Footer />
       </div>
     </>
   );
