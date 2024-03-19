@@ -1,0 +1,73 @@
+.signupContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f3f3;
+    height: 100vh;
+}
+
+.formContainer {
+    width: 50rem;
+    padding: 2rem 4rem 2rem 4rem;
+    background-color: #ffffff;
+    border-radius: 0.7rem;
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #000000;
+    text-align: center;
+}
+
+.description {
+    font-size: 1rem;
+    color: #7B7288;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.form {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.inputGroup label {
+    font-size: 0.8rem;
+    color: #666666;
+}
+
+.inputGroup input {
+    height: 3rem;
+    border: 1px solid #cccccc;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-size: 1rem;
+    color: #666666;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submitButton {
+    width: 6.5rem;
+    height: 3rem;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #66DE9D;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}

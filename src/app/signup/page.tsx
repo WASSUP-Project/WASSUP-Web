@@ -1,8 +1,5 @@
-export default function Signup() {
-  return (
-    <div>
-      <h1>Signup</h1>
-      <p>This is the signup page</p>
-    </div>
-  );
+import Signup from "@/containers/signup/Signup";
+
+export default function SignupPage() {
+  return <Signup />;
 }
