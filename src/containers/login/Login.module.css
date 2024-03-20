@@ -93,6 +93,10 @@
     cursor: pointer;
 }
 
+.link:hover {
+    text-decoration: underline;
+}
+
 .buttonGroup {
     display: flex;
     justify-content: flex-end;
