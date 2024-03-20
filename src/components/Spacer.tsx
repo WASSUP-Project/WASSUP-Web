@@ -1,8 +1,12 @@
 import React from "react";
-import styles from "./Spacer.module.css";
 
-const Spacer = () => {
-  return <div className={styles.spacer} />;
+type SpacerProps = {
+  height?: number;
 };
 
-export default Spacer;
+export default function Spacer(props: SpacerProps) {
+  const convertedHeight =
+    typeof props.height === "number" ? `${props.height}rem` : "10rem";
+
+  return <div style={{ height: convertedHeight }} />;
+}
