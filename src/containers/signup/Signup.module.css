@@ -36,6 +36,7 @@
 }
 
 .inputGroup {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
@@ -47,6 +48,7 @@
 }
 
 .inputGroup input {
+    width: 100%;
     height: 3rem;
     border: 1px solid #cccccc;
     border-radius: 0.5rem;
@@ -55,19 +57,57 @@
     color: #666666;
 }
 
+.inputGroup button {
+    position: absolute;
+    width: 6rem;
+    height: 2rem;
+    right: 0;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #b6b6b6;
+    color: #ffffff;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
 .buttonGroup {
     display: flex;
     justify-content: flex-end;
+    gap: 1rem;
+}
+
+.cancelButton {
+    width: 6rem;
+    height: 3rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #b6b6b6;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+
 }
 
 .submitButton {
-    width: 6.5rem;
+    width: 6rem;
     height: 3rem;
     border: none;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     background-color: #66DE9D;
     color: #ffffff;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
+}
+
+.errorMessage {
+    font-size: 0.9rem;
+    color: #FF0000;
+    height: 0;
+    text-align: left;
+    padding-left: 0.2rem;
 }
