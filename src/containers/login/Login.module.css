@@ -1,0 +1,134 @@
+.signupContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f3f3;
+    height: 100vh;
+}
+
+.formContainer {
+    width: 50rem;
+    padding: 2rem 4rem 2rem 4rem;
+    background-color: #ffffff;
+    border-radius: 0.7rem;
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #000000;
+    text-align: center;
+}
+
+.description {
+    font-size: 1rem;
+    color: #7B7288;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.form {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.inputGroup label {
+    font-size: 0.8rem;
+    color: #666666;
+}
+
+.inputGroup input {
+    width: 100%;
+    height: 3rem;
+    border: 1px solid #cccccc;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-size: 1rem;
+    color: #666666;
+}
+
+.inputGroup button {
+    position: absolute;
+    width: 6rem;
+    height: 2rem;
+    right: 0;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #b6b6b6;
+    color: #ffffff;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.bottomGroup {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.linkGroup {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.link {
+    font-size: 0.9rem;
+    color: #7B7288;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.cancelButton {
+    justify-content: flex-end;
+    width: 6rem;
+    height: 3rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #b6b6b6;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.submitButton {
+    justify-content: flex-end;
+    width: 6rem;
+    height: 3rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #66DE9D;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.errorMessage {
+    font-size: 0.9rem;
+    color: #FF0000;
+    height: 0;
+    text-align: left;
+    padding-left: 0.2rem;
+}
