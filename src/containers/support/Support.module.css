@@ -1,0 +1,57 @@
+.supportContainer {
+    flex-direction: column;
+    padding-top: 2rem;
+    min-height: 100vh;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: row;
+    min-height: calc(100vh - 2rem - 6rem);
+    padding: 5rem;
+}
+
+.leftNav {
+    width: 300px;
+    padding: 2rem;
+    height: 100%;
+}
+
+.navTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.leftNav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.leftNav li {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+
+.leftNav li:hover {
+    background-color: #ececec;
+    border-radius: 4px;
+}
+
+.leftNav a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+}
+
+.leftNav li.active {
+    background-color: #e4d5fe;
+    border-radius: 4px;
+}
+
+.rightContent {
+    flex: 1;
+    padding: 2rem;
+    border-left: 1px solid #ddd;
+}
