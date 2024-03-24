@@ -57,11 +57,11 @@ export default function Group() {
         <div className={styles.group_container}>
           {groups ? (
             groups.map((group) => (
-              <>
-                <Link href={`/group/${group.id}`} key={group.id}>
+              <div key={group.id}>
+                <Link href={`/group/${group.id}`}>
                   <GroupItem key={group.id} {...group} />
                 </Link>
-              </>
+              </div>
             ))
           ) : (
             <div className={styles.no_group}>그룹이 없습니다.</div>
