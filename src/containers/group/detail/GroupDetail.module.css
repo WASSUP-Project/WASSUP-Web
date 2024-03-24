@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    padding-top: 2rem;
+}
+
+.group_title {
+    font-size: 35px;
+    font-weight: 700;
+    color: #000000;
+    padding-left: 2rem;
+    padding-bottom: 1rem;
+}
+
+.list_container {
+    width: 300px;
+}
+
+.list_item {
+    font-size: 1.4rem;
+    padding: 2rem;
+}
+
+@keyframes padding-grow {
+    from {}
+    to {
+        padding-left: 45%;
+    }
+}
+
+.selected_item {
+    font-size: 1.2rem;
+    color: #ffffff;
+    background-color: #0e922f;
+    animation: padding-grow 0.3s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.group_info_container {
+    padding: 2rem;
+}
