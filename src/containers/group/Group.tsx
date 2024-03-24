@@ -12,6 +12,7 @@ import PositiveButton from "@/components/buttons/PositiveButton";
 
 export default function Group() {
   const [user, setUser] = useState<admin | null>({
+    // 임시 데이터
     id: 1,
     name: "홍길동",
     phone: "010-1234-5678",
@@ -20,6 +21,7 @@ export default function Group() {
   });
 
   const [groups, setGroups] = useState<group[] | null>([
+    // 임시 데이터
     {
       id: 1,
       name: "아이사랑수학학원",
@@ -58,7 +60,7 @@ export default function Group() {
           {groups ? (
             groups.map((group) => (
               <div key={group.id}>
-                <Link href={`/group/${group.id}`}>
+                <Link href={`/group/detail?id=${group.id}`}>
                   <GroupItem key={group.id} {...group} />
                 </Link>
               </div>

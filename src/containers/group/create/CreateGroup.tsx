@@ -225,7 +225,7 @@ export default function Signup() {
                 </button>
               </Link>
               <button type="submit" className={styles.submit_button}>
-                가입하기
+                생성하기
               </button>
             </div>
           </form>
