@@ -18,10 +18,7 @@ const validationSchema = yup.object().shape({
   emailVerificationCode: yup
     .string()
     .required("이메일 인증번호를 입력해주세요."),
-  businessNumber: yup
-    .string()
-    .required("사업자 번호를 입력해주세요.")
-    .matches(/^\d{10,13}$/, "유효한 사업자 번호를 입력해주세요."),
+  businessNumber: yup.string(),
   address: yup.string().required("대표 주소를 입력해주세요."),
   groupImage: yup.string().required("그룹 이미지를 업로드해주세요."),
 });
@@ -143,12 +140,6 @@ export default function Signup() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.businessNumber &&
-                formik.errors.businessNumber && (
-                  <div className={styles.error_message}>
-                    {formik.errors.businessNumber}
-                  </div>
-                )}
             </div>
 
             <div className={styles.input_group}>
