@@ -285,7 +285,7 @@ export default function MemberManage() {
                   </ModalBody>
                   <ModalFooter>
                     <Button color="primary" onPress={onClose}>
-                      전송하기
+                      확인
                     </Button>
                   </ModalFooter>
                 </>
@@ -320,7 +320,7 @@ export default function MemberManage() {
                       돌아가기
                     </Button>
                     <Button color="primary" onPress={onClose}>
-                      확인
+                      전송하기
                     </Button>
                   </ModalFooter>
                 </>
