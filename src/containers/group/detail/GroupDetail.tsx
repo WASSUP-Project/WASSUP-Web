@@ -15,9 +15,10 @@ export default function GroupDetail() {
   const searchParams = useSearchParams();
   const [groupData, setGroupData] = useState<group | null>(null);
   const [selectedAction, setSelectedAction] = useState<string>("manage");
+  const [selectedId, setSelectedId] = useState<number>(0);
 
   useEffect(() => {
-    const id = searchParams.get("id");
+    setSelectedId(parseInt(searchParams.get("id") || "0"));
 
     // 추후 API로 대체
     async function fetchGroupData() {
@@ -34,10 +35,10 @@ export default function GroupDetail() {
       });
     }
 
-    if (id) {
+    if (selectedId) {
       fetchGroupData();
     }
-  }, [searchParams]);
+  }, [searchParams, selectedId]);
 
   const items = [
     {
@@ -95,7 +96,7 @@ export default function GroupDetail() {
     }
   }
 
-  function renderComponent() {
+  function renderComponent(id: number) {
     switch (selectedAction) {
       case "manage":
         return <MemberManage />;
@@ -104,7 +105,7 @@ export default function GroupDetail() {
       case "notice":
         return <GroupNotice />;
       case "edit":
-        return <GroupManage />;
+        return <GroupManage id={id} />;
     }
   }
   return (
@@ -137,7 +138,9 @@ export default function GroupDetail() {
             </Listbox>
           </div>
 
-          <div className={styles.group_info_container}>{renderComponent()}</div>
+          <div className={styles.group_info_container}>
+            {renderComponent(selectedId)}
+          </div>
         </div>
       ) : (
         <div>Loading...</div>
