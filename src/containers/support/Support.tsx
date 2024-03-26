@@ -6,6 +6,7 @@ import FAQ from "@/containers/support/contents/FAQ";
 import Inquiry from "@/containers/support/contents/Inquiry";
 import MyInquiry from "@/containers/support/contents/MyInquiry";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Support() {
   const [activeMenu, setActiveMenu] = useState<string>("faq");
@@ -18,7 +19,10 @@ export default function Support() {
     <>
       <div className={styles.supportContainer}>
         <div>
-          <Nav text="로그인" positiveText="회원가입" />
+          <Nav
+            textButtonComponent={() => <Link href="/login">로그인</Link>}
+            buttonComponent={() => <Link href="/signup">회원가입</Link>}
+          />
         </div>
         <div className={styles.contentContainer}>
           <div className={styles.leftNav}>

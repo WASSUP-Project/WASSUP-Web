@@ -1,14 +1,17 @@
 import Spacer from "@/components/Spacer";
 import Footer from "@/components/footer/Footer";
 import Nav from "@/components/nav/Nav";
-import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Divider, Link } from "@nextui-org/react";
 import styles from "./BillPolicy.module.css";
 
 export default function Main() {
   return (
     <>
       <div className={styles.container}>
-        <Nav text="로그인" positiveText="회원가입" />
+        <Nav
+          textButtonComponent={() => <Link href="/login">로그인</Link>}
+          buttonComponent={() => <Link href="/signup">회원가입</Link>}
+        />
 
         <Spacer height={7} />
 

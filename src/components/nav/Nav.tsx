@@ -1,49 +1,58 @@
-import Link from "next/link";
+import React from "react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Link,
+  Button,
+} from "@nextui-org/react";
 import styles from "./Nav.module.css";
-import PositiveButton from "../buttons/PositiveButton";
-import TextButton from "../buttons/TextButton";
 
 type navProps = {
-  text: string;
-  positiveText: string;
+  textButtonComponent: () => JSX.Element;
+  buttonComponent: () => JSX.Element;
 };
 
-function Nav(props: navProps) {
+export default function Nav(props: navProps) {
   return (
-    <div className={styles.header}>
-      <Link href="/" className={styles.logo}>
-        WASSUP
-      </Link>
-      <div className={styles.navItems}>
-        <div className={styles.navItem}>
-          <Link href="/about" className={styles.navItemText}>
+    <Navbar>
+      <NavbarBrand>
+        <Link href="/" className={styles.logo}>
+          WASSUP
+        </Link>
+      </NavbarBrand>
+      <NavbarContent justify="center" className={styles.nav_content}>
+        <NavbarItem>
+          <Link href="/about" className={styles.nav_item_text}>
             제품 소개
           </Link>
-          <div className={styles.navItemIcon} />
-        </div>
-        <div className={styles.navItem}>
-          <Link href="/policy/bill" className={styles.navItemText}>
+        </NavbarItem>
+        <NavbarItem isActive>
+          <Link href="/policy/bill" className={styles.nav_item_text}>
             요금 정책
           </Link>
-          <div className={styles.navItemIcon} />
-        </div>
-        <div className={styles.navItem}>
-          <Link href="/support" className={styles.navItemText}>
+        </NavbarItem>
+        <NavbarItem>
+          <Link href="/support" className={styles.nav_item_text}>
             고객 지원
           </Link>
-          <div className={styles.navItemIcon} />
-        </div>
-      </div>
-      <div className={styles.auth}>
-        <Link href="/login" className={styles.authItem}>
-          <TextButton text={props.text} />
-        </Link>
-        <Link href="/signup" className={styles.authItem}>
-          <PositiveButton text={props.positiveText} />
-        </Link>
-      </div>
-    </div>
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarContent justify="end">
+        <NavbarItem>
+          <div className={styles.nav_end_content_item}>
+            <div className={styles.text_button}>
+              {props.textButtonComponent()}
+            </div>
+          </div>
+        </NavbarItem>
+        <NavbarItem>
+          <div className={styles.nav_end_content_item}>
+            <div className={styles.button}>{props.buttonComponent()}</div>
+          </div>
+        </NavbarItem>
+      </NavbarContent>
+    </Navbar>
   );
 }
-
-export default Nav;

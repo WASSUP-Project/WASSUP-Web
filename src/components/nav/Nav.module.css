@@ -1,13 +1,3 @@
-.header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px;
-    gap: 233px;
-    margin: 0 auto;
-    justify-content: center;
-}
-
 .logo {
     width: 111px;
     height: 24px;
@@ -21,32 +11,18 @@
     color: #1D2830;
 }
 
-.navItems {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 95px;
+.nav_content {
+    padding: 0 3rem;
 }
 
-.navItem {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-}
-
-.navItem:hover {
-    font-weight: 600;
-}
-
-.navItemText {
+.nav_item_text {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 16px;
     color: #35414B;
+    padding: 0 2rem;
 }
 
 .navItemIcon {
@@ -55,16 +31,47 @@
     background: #FFFFFF;
 }
 
-.auth {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
-
-.authItem {
+.nav_end_content_item {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 4px;
     cursor: pointer;
+}
+
+.text_button {
+    padding: 8px 16px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    cursor: pointer;
+    background: none;
+    color: black;
+    border: none;
+}
+
+.text_button:hover {
+    font-weight: 600;
+}
+
+.button {
+    padding: 8px 23px;
+    border-radius: 4px;
+    font-style: normal;
+    width: 150px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+
+    border: none;
+    background-color: #e4d5fe;
+    color: #926dff;
+}
+
+.button:hover {
+    background-color: #D9C3FF;
 }
