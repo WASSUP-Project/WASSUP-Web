@@ -44,8 +44,8 @@ export default function Group() {
     <>
       <div className={styles.container}>
         <Nav
-          text={user ? user.name : "로그인"}
-          positiveText={user ? "내 그룹" : "회원가입"}
+          textButtonComponent={() => <>홍길동</>}
+          buttonComponent={() => <Link href="/group">내 그룹</Link>}
         />
 
         <Spacer height={7} />

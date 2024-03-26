@@ -67,7 +67,7 @@ export default function Signup() {
           회원 정보를 정확히 입력해주세요.
         </div>
 
-        <Spacer />
+        <Spacer height={5} />
 
         <div className={styles.formContainer}>
           <form className={styles.form} onSubmit={formik.handleSubmit}>

@@ -4,13 +4,17 @@ import Footer from "@/components/footer/Footer";
 import Nav from "@/components/nav/Nav";
 import styles from "./Main.module.css";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Main() {
   return (
     <>
       <div style={{ overflow: "scroll" }}>
         <div>
-          <Nav text="로그인" positiveText="회원가입" />
+          <Nav
+            textButtonComponent={() => <Link href="/login">로그인</Link>}
+            buttonComponent={() => <Link href="/signup">회원가입</Link>}
+          />
         </div>
 
         <Spacer />
