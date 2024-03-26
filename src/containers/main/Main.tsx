@@ -38,7 +38,9 @@ export default function Main() {
                 얼굴 인식으로 편하게 출결을 관리하세요. <br />
                 안심 등하원 메시지로 자녀의 출결을 확인하세요
               </p>
-              <PositiveButton text="무료로 시작하기" />
+              <Link href="/group">
+                <PositiveButton text="그룹 미리보기" />
+              </Link>
             </div>
             <div>
               <Image
