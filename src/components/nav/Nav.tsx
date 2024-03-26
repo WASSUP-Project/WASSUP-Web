@@ -11,7 +11,9 @@ type navProps = {
 function Nav(props: navProps) {
   return (
     <div className={styles.header}>
-      <div className={styles.logo}>WASSUP</div>
+      <Link href="/" className={styles.logo}>
+        WASSUP
+      </Link>
       <div className={styles.navItems}>
         <div className={styles.navItem}>
           <Link href="/about" className={styles.navItemText}>
