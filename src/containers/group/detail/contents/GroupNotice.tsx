@@ -1,8 +1,20 @@
+import Image from "next/image";
+import styles from "./GroupNotice.module.css";
+
 export default function GroupNotice() {
   return (
-    <div>
-      <h1>Group Notice</h1>
-      <div>공지사항 페이지입니다.</div>
-    </div>
+    <>
+      <h1 className={styles.title}>공지사항</h1>
+      <div className={styles.container}>
+        <div>
+          <Image
+            src="/noticeEx.png"
+            alt="Image of something relevant"
+            width={560}
+            height={250}
+          />
+        </div>
+      </div>
+    </>
   );
 }
