@@ -1,5 +1,6 @@
 import { Button } from "@nextui-org/react";
 import styles from "./Attendance.module.css";
+import Link from "next/link";
 
 export default function Attendance() {
   return (
@@ -7,7 +8,9 @@ export default function Attendance() {
       <h1 className={styles.title}>출결 관리</h1>
       <div className={styles.container}>
         <div className={styles.buttonContainer}>
-          <Button color="primary">출석 화면</Button>
+          <Button color="primary">
+            <Link href="/attendance">출석 화면</Link>
+          </Button>
         </div>
         <div className={styles.summary}>
           <div className={styles.attendanceRate}>금일 출석률: 88% (22/25)</div>
