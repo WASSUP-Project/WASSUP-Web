@@ -4,13 +4,21 @@ import Nav from "@/components/nav/Nav";
 import { Card, CardHeader, CardBody, Divider, Link } from "@nextui-org/react";
 import styles from "./BillPolicy.module.css";
 
-export default function Main() {
+export default function BillPolicy() {
   return (
     <>
       <div className={styles.container}>
         <Nav
-          textButtonComponent={() => <Link href="/login">로그인</Link>}
-          buttonComponent={() => <Link href="/signup">회원가입</Link>}
+          textButtonComponent={() => (
+            <Link href="/login" className={styles.text_button}>
+              로그인
+            </Link>
+          )}
+          buttonComponent={() => (
+            <Link href="/signup" className={styles.button}>
+              회원가입
+            </Link>
+          )}
         />
 
         <Spacer height={7} />
