@@ -9,7 +9,7 @@
 
 .form_container {
     width: 50rem;
-    padding: 2rem 4rem 2rem 4rem;
+    padding: 1.2rem 2.5rem 1.2rem 2.5em;
     background-color: #ffffff;
     border-radius: 0.7rem;
 }
@@ -32,7 +32,7 @@
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.1rem;
 }
 
 .input_group {
