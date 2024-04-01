@@ -3,6 +3,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useDaumPostcodePopup } from "react-daum-postcode";
 
 import styles from "./CreateGroup.module.css";
 import Spacer from "@/components/Spacer";
@@ -44,6 +45,7 @@ export default function Signup() {
       emailVerificationCode: "",
       businessNumber: "",
       address: "",
+      addressDetail: "",
       groupImage: "",
     },
     validationSchema: validationSchema,
@@ -51,6 +53,43 @@ export default function Signup() {
       console.log("Form submitted:", values);
     },
   });
+
+  const scriptUrl =
+    "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+  const open = useDaumPostcodePopup(scriptUrl);
+
+  const handleComplete = (data: {
+    address: any;
+    addressType: string;
+    bname: string;
+    buildingName: string;
+  }) => {
+    let fullAddress = data.address;
+    let extraAddress = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+
+    formik.setFieldValue("address", fullAddress);
+  };
+
+  const handleClick = () => {
+    open({
+      onComplete: handleComplete,
+      width: 500,
+      height: 600,
+      left: window.screen.width / 2 - 500 / 2,
+      top: window.screen.height / 2 - 600 / 2,
+    });
+  };
 
   return (
     <>
@@ -113,20 +152,43 @@ export default function Signup() {
 
             <div className={styles.input_group}>
               <label htmlFor="address">대표 주소</label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                placeholder="대표 주소를 입력해주세요."
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
+              <div className={styles.inputWithButton}>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  placeholder="대표 주소를 입력해주세요."
+                  value={formik.values.address}
+                  onChange={formik.handleChange}
+                  readOnly
+                  onBlur={formik.handleBlur}
+                />
+                <button
+                  type="button"
+                  className={styles.button}
+                  onClick={handleClick}
+                >
+                  주소찾기
+                </button>
+              </div>
               {formik.touched.address && formik.errors.address && (
                 <div className={styles.error_message}>
                   {formik.errors.address}
                 </div>
               )}
+            </div>
+
+            <div className={styles.input_group}>
+              <label htmlFor="businessNumber">추가 주소 (선택)</label>
+              <input
+                type="text"
+                id="businessNumber"
+                name="addressDetail"
+                placeholder="추가 주소를 입력해주세요."
+                value={formik.values.addressDetail}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
             </div>
 
             <div className={styles.input_group}>
