@@ -18,3 +18,54 @@
     padding-left: 0.5rem;
     padding-bottom: 1.5rem;
 }
+
+.button_group {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.button {
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.notice_container {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.notice {
+    margin-bottom: 1.2rem;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notice_title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.notice_content {
+    color: #666;
+    line-height: 1.6;
+}
+
+.notice_date {
+    font-size: 0.9rem;
+    color: #999;
+    margin-top: 1rem;
+    text-align: right;
+}
+
+.empty_notice {
+    text-align: center;
+    padding: 2rem 0;
+}
