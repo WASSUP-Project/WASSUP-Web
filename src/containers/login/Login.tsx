@@ -6,6 +6,7 @@ import * as yup from "yup";
 import Spacer from "@/components/Spacer";
 import styles from "./Login.module.css";
 import Link from "next/link";
+import { login } from "@/services/login/login";
 
 export default function Login() {
   const validationSchema = yup.object().shape({
@@ -29,6 +30,22 @@ export default function Login() {
       console.log("Form submitted:", values);
     },
   });
+
+  const requestLogin = async () => {
+    const loginRequest = {
+      adminId: formik.values.id,
+      password: formik.values.password,
+    };
+    const response = await login(loginRequest);
+    console.log(response);
+
+    if (response) {
+      localStorage.setItem("accessToken", response.token);
+      window.location.href = "/";
+    } else {
+      alert("아이디와 비밀번호를 확인해주세요.");
+    }
+  };
 
   return (
     <>
@@ -96,7 +113,11 @@ export default function Login() {
                     돌아가기
                   </button>
                 </Link>
-                <button type="submit" className={styles.submitButton}>
+                <button
+                  type="submit"
+                  className={styles.submitButton}
+                  onClick={requestLogin}
+                >
                   로그인
                 </button>
               </div>
