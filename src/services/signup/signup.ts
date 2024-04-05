@@ -29,9 +29,7 @@ export const signup = async (signupRequest: SignupRequest) => {
 
 export const checkDuplicateId = async (id: string) => {
     try {
-        const response = await axios.post(`/api/admins/duplicate?id=${id}`, {
-        id
-        }, {
+        const response = await axios.post(`/api/admins/duplicate?adminId=${id}`, {
         headers: {
             "Content-Type": "application/json",
         },
