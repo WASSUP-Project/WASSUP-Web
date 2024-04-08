@@ -5,7 +5,6 @@ import {
   NavbarContent,
   NavbarItem,
   Link,
-  Button,
 } from "@nextui-org/react";
 import styles from "./Nav.module.css";
 

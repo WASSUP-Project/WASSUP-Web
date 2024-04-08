@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
+import React from "react";
 import Spacer from "@/components/Spacer";
 import PositiveButton from "@/components/buttons/PositiveButton";
 import Footer from "@/components/footer/Footer";
@@ -8,7 +10,8 @@ import styles from "./Main.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { ResponseAdmin, getAdminName } from "@/services/admin/admin";
+import { getAdminName } from "@/services/admin/admin";
+import { logout } from "@/services/login/login";
 import {
   Dropdown,
   DropdownTrigger,
@@ -16,32 +19,46 @@ import {
   DropdownItem,
   Spinner,
 } from "@nextui-org/react";
-import { logout } from "@/services/login/login";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { tokenState } from "@/states/token";
+import { adminState } from "@/states/admin";
 
 export default function Main() {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [admin, setAdmin] = useState<ResponseAdmin | null>(null);
+  const accessToken = useRecoilValue(tokenState);
+  const [admin, setAdmin] = useRecoilState(adminState);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      setIsLoading(true);
-      setAccessToken(token);
-
-      const response = getAdminName();
-      response
-        .then((data) => {
-          setAdmin(data || null);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error("[Error] 관리자 정보 불러오기 실패:", error);
-          setIsLoading(false);
-        });
-    } else {
+    if (!accessToken) {
       setIsLoading(false);
+      return;
     }
+
+    if (admin?.id != null) {
+      setIsLoading(false);
+      return;
+    }
+
+    const response = getAdminName();
+    response
+      .then((data) => {
+        setAdmin(
+          data
+            ? {
+                id: data.id,
+                name: data.name,
+                phoneNumber: data.phoneNumber,
+              }
+            : null
+        );
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("[Error] 관리자 정보 불러오기 실패:", error);
+        setIsLoading(false);
+      });
+
+    setIsLoading(true);
   }, [accessToken]);
 
   function requestLogout() {
@@ -60,23 +77,19 @@ export default function Main() {
       {!isLoading && (
         <div style={{ overflow: "scroll" }}>
           <div>
-            {accessToken ? (
-              <Nav
-                textButtonComponent={() => (
-                  <div>
-                    {admin ? (
+            <Nav
+              textButtonComponent={
+                admin
+                  ? () => (
                       <Dropdown>
-                        <DropdownTrigger>
-                          <span>{admin.name}</span>
-                        </DropdownTrigger>
+                        <DropdownTrigger>{admin.name}</DropdownTrigger>
                         <DropdownMenu
-                          aria-label="Action event example"
                           onAction={(key) => {
                             if (key == "logout") {
                               requestLogout();
                             }
                             if (key == "my_info") {
-                              alert("준비중입니다.");
+                              window.location.href = "/profile";
                             }
                           }}
                         >
@@ -90,19 +103,15 @@ export default function Main() {
                           </DropdownItem>
                         </DropdownMenu>
                       </Dropdown>
-                    ) : (
-                      "내 정보"
-                    )}
-                  </div>
-                )}
-                buttonComponent={() => <Link href="/group">내 그룹</Link>}
-              />
-            ) : (
-              <Nav
-                textButtonComponent={() => <Link href="/login">로그인</Link>}
-                buttonComponent={() => <Link href="/signup">회원가입</Link>}
-              />
-            )}
+                    )
+                  : () => <Link href="/login">로그인</Link>
+              }
+              buttonComponent={
+                admin
+                  ? () => <Link href="/group">내 그룹</Link>
+                  : () => <Link href="/signup">회원가입</Link>
+              }
+            />
           </div>
 
           <Spacer />
@@ -136,6 +145,7 @@ export default function Main() {
                   alt="Image of something relevant"
                   width={500}
                   height={250}
+                  className={styles.content1_2}
                 />
               </div>
             </div>

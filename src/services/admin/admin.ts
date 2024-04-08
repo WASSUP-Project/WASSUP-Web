@@ -3,9 +3,9 @@ import axios from 'axios';
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export type ResponseAdmin = {
-    id: number;
-    name: string;
-    phoneNumber: string;
+        id: number;
+        name: string;
+        phoneNumber: string;
 };
 
 export const getAdminName = async () => {

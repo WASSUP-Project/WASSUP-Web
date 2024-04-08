@@ -73,7 +73,16 @@
 }
 
 .content1_1 {
-    padding: 8rem;
+    padding: 8rem 4rem 8rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.content1_2 {
+    min-width: 500px;
+    padding-right: 4rem;
+    padding-left: 4rem;
     display: flex;
     flex-direction: column;
     gap: 35px;
