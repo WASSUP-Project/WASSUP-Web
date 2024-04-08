@@ -7,6 +7,7 @@ import Spacer from "@/components/Spacer";
 import styles from "./Login.module.css";
 import Link from "next/link";
 import { login } from "@/services/login/login";
+import { useSetRecoilState } from "recoil";
 
 export default function Login() {
   const validationSchema = yup.object().shape({
@@ -41,7 +42,7 @@ export default function Login() {
 
     if (response) {
       localStorage.setItem("accessToken", response.token);
-      window.location.href = "/";
+      location.href = "/";
     } else {
       alert("아이디와 비밀번호를 확인해주세요.");
     }

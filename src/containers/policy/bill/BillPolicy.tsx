@@ -1,26 +1,12 @@
-import Spacer from "@/components/Spacer";
-import Footer from "@/components/footer/Footer";
-import Nav from "@/components/nav/Nav";
-import { Card, CardHeader, CardBody, Divider, Link } from "@nextui-org/react";
-import styles from "./BillPolicy.module.css";
+"use client";
 
+import Spacer from "@/components/Spacer";
+import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
+import styles from "./BillPolicy.module.css";
 export default function BillPolicy() {
   return (
     <>
       <div className={styles.container}>
-        <Nav
-          textButtonComponent={() => (
-            <Link href="/login" className={styles.text_button}>
-              로그인
-            </Link>
-          )}
-          buttonComponent={() => (
-            <Link href="/signup" className={styles.button}>
-              회원가입
-            </Link>
-          )}
-        />
-
         <div className={styles.content}>
           <Spacer height={7} />
 
@@ -83,8 +69,6 @@ export default function BillPolicy() {
 
           <Spacer height={7} />
         </div>
-
-        <Footer />
       </div>
     </>
   );

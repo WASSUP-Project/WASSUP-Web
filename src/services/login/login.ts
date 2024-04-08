@@ -24,5 +24,10 @@ export const login = async (loginRequest: LoginRequest) => {
 };
 
 export const logout = async () => {
-    window.localStorage.clear();
+  let localStorage: Storage | null = null;
+  if (typeof window !== 'undefined') {
+    localStorage = window.localStorage;
+  }
+
+  localStorage?.removeItem("accessToken");
 }

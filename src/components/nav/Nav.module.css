@@ -25,6 +25,11 @@
     padding: 0 2rem;
 }
 
+.nav_item_text a {
+    font-weight: 500;
+    font-size: 16px;
+}
+
 .navItemIcon {
     width: 14px;
     height: 8px;
@@ -39,7 +44,6 @@
 }
 
 .text_button {
-    padding: 8px 16px;
     box-sizing: border-box;
     border-radius: 4px;
     font-style: normal;
@@ -52,24 +56,34 @@
     border: none;
 }
 
-.text_button:hover {
-    font-weight: 600;
-}
-
 .button {
-    padding: 8px 23px;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
     border-radius: 4px;
     font-style: normal;
-    width: 150px;
     font-weight: 500;
     font-size: 16px;
     line-height: 30px;
     text-align: center;
     cursor: pointer;
+    width: 8rem;
+    min-width: 8rem;
 
     border: none;
     background-color: #e4d5fe;
     color: #926dff;
+}
+
+.text_button p {
+    padding: 1rem;
+}
+
+.text_button a {
+    padding: 1rem;
+}
+
+.button a {
+    padding: 1rem 2rem 1rem 2rem;
 }
 
 .button:hover {
