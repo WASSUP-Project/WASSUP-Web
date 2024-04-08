@@ -43,11 +43,6 @@ export default function Group() {
   return (
     <>
       <div className={styles.container}>
-        <Nav
-          textButtonComponent={() => <>홍길동</>}
-          buttonComponent={() => <Link href="/group">내 그룹</Link>}
-        />
-
         <Spacer height={7} />
 
         <div className={styles.content_white}>

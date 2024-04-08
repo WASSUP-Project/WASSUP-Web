@@ -2,12 +2,9 @@
 "use client";
 
 import React from "react";
-import Spacer from "@/components/Spacer";
-import PositiveButton from "@/components/buttons/PositiveButton";
 import Footer from "@/components/footer/Footer";
 import Nav from "@/components/nav/Nav";
 import styles from "./Main.module.css";
-import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getAdminName } from "@/services/admin/admin";
@@ -18,23 +15,24 @@ import {
   DropdownMenu,
   DropdownItem,
   Spinner,
+  Button,
 } from "@nextui-org/react";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { tokenState } from "@/states/token";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { adminState } from "@/states/admin";
+import BillPolicy from "@/containers/policy/bill/BillPolicy";
+import Support from "@/containers/support/Support";
+import About from "@/containers/about/About";
+
+type menuType = "about" | "BillPolicy" | "Support";
 
 export default function Main() {
-  const accessToken = useRecoilValue(tokenState);
-  const [admin, setAdmin] = useRecoilState(adminState);
+  const admin = useRecoilValue(adminState);
+  const setAdmin = useSetRecoilState(adminState);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedMenu, setSelectedMenu] = useState<menuType>("about");
 
   useEffect(() => {
-    if (!accessToken) {
-      setIsLoading(false);
-      return;
-    }
-
-    if (admin?.id != null) {
+    if (admin != null) {
       setIsLoading(false);
       return;
     }
@@ -44,11 +42,7 @@ export default function Main() {
       .then((data) => {
         setAdmin(
           data
-            ? {
-                id: data.id,
-                name: data.name,
-                phoneNumber: data.phoneNumber,
-              }
+            ? { id: data.id, name: data.name, phoneNumber: data.phoneNumber }
             : null
         );
         setIsLoading(false);
@@ -59,11 +53,26 @@ export default function Main() {
       });
 
     setIsLoading(true);
-  }, [accessToken]);
+  }, []);
 
   function requestLogout() {
     logout();
-    window.location.href = "/";
+    setAdmin(null);
+  }
+
+  function handleMenuClick(menu: menuType) {
+    setSelectedMenu(menu);
+  }
+
+  function renderMenu() {
+    switch (selectedMenu) {
+      case "BillPolicy":
+        return <BillPolicy />;
+      case "Support":
+        return <Support />;
+      default:
+        return <About />;
+    }
   }
 
   return (
@@ -78,6 +87,23 @@ export default function Main() {
         <div style={{ overflow: "scroll" }}>
           <div>
             <Nav
+              contentComponents={[
+                () => (
+                  <Link href="/" onClick={() => handleMenuClick("about")}>
+                    제품 소개
+                  </Link>
+                ),
+                () => (
+                  <Link href="/" onClick={() => handleMenuClick("BillPolicy")}>
+                    요금 정책
+                  </Link>
+                ),
+                () => (
+                  <Link href="/" onClick={() => handleMenuClick("Support")}>
+                    고객 지원
+                  </Link>
+                ),
+              ]}
               textButtonComponent={
                 admin
                   ? () => (
@@ -114,69 +140,7 @@ export default function Main() {
             />
           </div>
 
-          <Spacer />
-
-          <div className={styles.mainContainer_white}>
-            <div className={styles.title}>
-              스마트 출결 파트너
-              <br />
-              WASSUP
-            </div>
-            <div className={styles.message}>실시간 등하원 안심 메시지</div>
-          </div>
-
-          <Spacer />
-
-          <div className={styles.mainContainer_gray}>
-            <div className={styles.content1}>
-              <div className={styles.content1_1}>
-                <h1 className={styles.content1Title}>스마트한 출결관리</h1>
-                <p className={styles.content1Description}>
-                  얼굴 인식으로 편하게 출결을 관리하세요. <br />
-                  안심 등하원 메시지로 자녀의 출결을 확인하세요
-                </p>
-                <Link href="/group">
-                  <PositiveButton text="그룹 미리보기" />
-                </Link>
-              </div>
-              <div>
-                <Image
-                  src="/image.png"
-                  alt="Image of something relevant"
-                  width={500}
-                  height={250}
-                  className={styles.content1_2}
-                />
-              </div>
-            </div>
-          </div>
-
-          <Spacer />
-
-          <div className={styles.mainContainer_white}>
-            <div className={styles.semiTitle}>쉽고 간편한 기능들</div>
-            <div>
-              <Image
-                src="/image1.png"
-                alt="Image of something relevant"
-                width={1300}
-                height={650}
-              ></Image>
-            </div>
-          </div>
-
-          <Spacer />
-
-          <div className={styles.mainContainer_gray}>
-            <div className={styles.banner}>
-              <Image
-                src="/image2.png"
-                alt="Image of something relevant"
-                width={1000}
-                height={200}
-              ></Image>
-            </div>
-          </div>
+          {renderMenu()}
 
           <Footer />
         </div>

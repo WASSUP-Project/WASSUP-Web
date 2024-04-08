@@ -25,6 +25,11 @@
     padding: 0 2rem;
 }
 
+.nav_item_text a {
+    font-weight: 500;
+    font-size: 16px;
+}
+
 .navItemIcon {
     width: 14px;
     height: 8px;

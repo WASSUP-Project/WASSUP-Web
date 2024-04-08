@@ -8,11 +8,8 @@ import styles from "./Login.module.css";
 import Link from "next/link";
 import { login } from "@/services/login/login";
 import { useSetRecoilState } from "recoil";
-import { tokenState } from "@/states/token";
 
 export default function Login() {
-  const setAccessToken = useSetRecoilState(tokenState);
-
   const validationSchema = yup.object().shape({
     id: yup
       .string()
@@ -44,7 +41,6 @@ export default function Login() {
     console.log(response);
 
     if (response) {
-      setAccessToken(response.token);
       localStorage.setItem("accessToken", response.token);
       location.href = "/";
     } else {
