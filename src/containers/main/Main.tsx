@@ -15,7 +15,6 @@ import {
   DropdownMenu,
   DropdownItem,
   Spinner,
-  Button,
 } from "@nextui-org/react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { adminState } from "@/states/admin";
@@ -53,7 +52,7 @@ export default function Main() {
       });
 
     setIsLoading(true);
-  }, []);
+  }, [admin]);
 
   function requestLogout() {
     logout();
