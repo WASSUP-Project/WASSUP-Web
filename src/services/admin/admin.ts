@@ -15,6 +15,7 @@ export const getAdminName = async () => {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")} `,
             },
+            timeout: 3000,
         });
         return response.data as ResponseAdmin;
     } catch (error) {
