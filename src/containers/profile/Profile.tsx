@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { ResponseAdmin, getAdminName } from "@/services/admin/admin";
 import styles from "./Profile.module.css";
-import { Spinner } from "@nextui-org/react";
+import { Link, Spinner } from "@nextui-org/react";
+import Image from "next/image";
 
 export default function Profile() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -45,11 +46,16 @@ export default function Profile() {
             {accessToken ? (
               <div>
                 {admin ? (
-                  <div>
-                    <div>
-                      <h1>{admin.name}님 환영합니다!</h1>
-                      <h2>관리자 페이지입니다.</h2>
-                    </div>
+                  <div className={styles.container}>
+                    <Image
+                      src="/profile.png"
+                      alt="profile"
+                      width={700}
+                      height={650}
+                    />
+                    <Link href="/" className={styles.link}>
+                      홈으로 돌아갈래요.
+                    </Link>
                   </div>
                 ) : (
                   <div>
