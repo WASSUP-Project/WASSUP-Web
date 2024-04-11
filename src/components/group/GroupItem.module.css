@@ -7,7 +7,6 @@
     gap: 11px;
 
     position: relative;
-    width: 602px;
     height: 215px;
 
     background: #ffffff;
@@ -16,9 +15,10 @@
 }
 
 .group_image {
-    width: 263px;
-    height: 195px;
-    border-radius: 20px;
+    width: 200px;
+    height: 200px;
+    padding: 15px;
+    border-radius: 30px;
 }
 
 .group_info {
