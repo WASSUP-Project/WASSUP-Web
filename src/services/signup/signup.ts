@@ -2,20 +2,20 @@ import axios from 'axios';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-type SignupRequest = {
+type RequestSignup = {
     adminId: string;
     password: string;
     name: string;
     phoneNumber: string;
 };
 
-export const signup = async (signupRequest: SignupRequest) => {
+export const signup = async (requestSignup: RequestSignup) => {
   try {
     const response = await axios.post(`/api/admins/signup`, {
-        adminId: signupRequest.adminId,
-        password: signupRequest.password,
-        name: signupRequest.name,
-        phoneNumber: signupRequest.phoneNumber,
+        adminId: requestSignup.adminId,
+        password: requestSignup.password,
+        name: requestSignup.name,
+        phoneNumber: requestSignup.phoneNumber,
     }, {
       headers: {
         "Content-Type": "application/json",
@@ -56,16 +56,16 @@ export const sendVerificationCode = async (phoneNumber: string) => {
     }
 };
 
-type VerifyCodeRequest = {
+type RequestVerifyCode = {
     phoneNumber: string;
     inputCertificationCode: string;
 };
 
-export const verifyCode = async (verifyCodeRequest: VerifyCodeRequest) => {
+export const verifyCode = async (requestVerifyCode: RequestVerifyCode) => {
     try {
         const response = await axios.post(`/api/admins/verify`, {
-            phoneNumber: verifyCodeRequest.phoneNumber,
-            inputCertificationCode: verifyCodeRequest.inputCertificationCode,
+            phoneNumber: requestVerifyCode.phoneNumber,
+            inputCertificationCode: requestVerifyCode.inputCertificationCode,
         }, {
         headers: {
             "Content-Type": "application/json",
