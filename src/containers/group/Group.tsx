@@ -28,7 +28,7 @@ export default function Group() {
       address: "서울특별시 구로구 항동로 2길 36, 3층",
       memberCount: 32,
       waitMemberCount: 5,
-      groupImage: "https://via.placeholder.com/120",
+      groupImage: "groupDefault.png",
     },
     {
       id: 2,
@@ -36,7 +36,7 @@ export default function Group() {
       address: "서울특별시 구로구 항동로 2길 36, 4층",
       memberCount: 17,
       waitMemberCount: 2,
-      groupImage: "https://via.placeholder.com/120",
+      groupImage: "groupDefault.png",
     },
   ]);
 
