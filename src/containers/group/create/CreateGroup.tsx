@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDaumPostcodePopup } from "react-daum-postcode";
@@ -8,6 +8,12 @@ import { useDaumPostcodePopup } from "react-daum-postcode";
 import styles from "./CreateGroup.module.css";
 import Spacer from "@/components/Spacer";
 import Link from "next/link";
+import {
+  checkDuplicateGroupName,
+  createGroup,
+  sendVerificationCode,
+  verifyCode,
+} from "@/services/group/group";
 
 const validationSchema = yup.object().shape({
   groupName: yup
@@ -15,42 +21,33 @@ const validationSchema = yup.object().shape({
     .required("그룹명을 입력해주세요.")
     .min(3, "3자 이상 입력해주세요."),
   description: yup.string().required("그룹 소개를 입력해주세요."),
-  email: yup.string().required("대표 이메일을 입력해주세요.").email(),
-  emailVerificationCode: yup
+  email: yup
     .string()
-    .required("이메일 인증번호를 입력해주세요."),
+    .required("대표 이메일을 입력해주세요.")
+    .email("이메일 형식이 아닙니다."),
+  verificationCode: yup.string().required("이메일 인증번호를 입력해주세요."),
   businessNumber: yup.string(),
   address: yup.string().required("대표 주소를 입력해주세요."),
-  groupImage: yup.string().required("그룹 이미지를 업로드해주세요."),
 });
 
-const handleDuplicateCheck = () => {
-  console.log("handleDuplicateCheck");
-};
+export default function CreateGroup() {
+  const [isDuplicateGroupName, setIsDuplicateGroupName] = useState(false);
+  const [isSent, setIsSent] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
 
-const handleSendVerificationCode = () => {
-  console.log("handleSendVerificationCode");
-};
-
-const handleVerifyCode = () => {
-  console.log("handleVerifyCode");
-};
-
-export default function Signup() {
   const formik = useFormik({
     initialValues: {
       groupName: "",
       description: "",
       email: "",
-      emailVerificationCode: "",
+      verificationCode: "",
       businessNumber: "",
       address: "",
       addressDetail: "",
-      groupImage: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log("Form submitted:", values);
+    onSubmit: () => {
+      requestCreateGroup();
     },
   });
 
@@ -91,6 +88,103 @@ export default function Signup() {
     });
   };
 
+  const requestCreateGroup = async () => {
+    if (!isDuplicateGroupName) {
+      alert("그룹명 중복확인을 해주세요.");
+      return;
+    }
+
+    if (!isSent || !isVerified) {
+      alert("이메일 인증번호를 발송해주세요.");
+      return;
+    }
+
+    const requestCreateGroup = {
+      groupName: formik.values.groupName,
+      groupDescription: formik.values.description,
+      address: formik.values.address,
+      businessNumber: formik.values.businessNumber,
+      email: formik.values.email,
+      imageUrl: "defaultGroup.png",
+    };
+    const response = await createGroup(requestCreateGroup);
+
+    if (response) {
+      alert("그룹이 생성되었습니다.");
+    } else {
+      alert("그룹 생성에 실패했습니다.");
+    }
+  };
+
+  const requestCheckDuplicateGroupName = async () => {
+    if (formik.values.groupName.length < 3) {
+      alert("그룹명은 3자 이상 입력해주세요.");
+      return;
+    }
+
+    const data = checkDuplicateGroupName(formik.values.groupName);
+
+    if ((await data) === false) {
+      setIsDuplicateGroupName(true);
+      alert("사용 가능한 그룹명입니다.");
+
+      const groupNameInput = document.getElementById("groupName");
+      if (groupNameInput) {
+        groupNameInput.setAttribute("disabled", "true");
+      }
+
+      formik.setFieldValue("groupName", formik.values.groupName);
+    } else {
+      setIsDuplicateGroupName(false);
+      alert("이미 사용 중인 그룹명입니다.");
+    }
+  };
+
+  const requestSendVerificationCode = () => {
+    if (!formik.values.email) {
+      alert("대표 이메일을 입력해주세요.");
+      return;
+    }
+
+    sendVerificationCode(formik.values.email);
+    setIsSent(true);
+
+    const emailInput = document.getElementById("email");
+    if (emailInput) {
+      alert("인증번호가 발송되었습니다.");
+      emailInput.setAttribute("disabled", "true");
+    }
+
+    formik.setFieldValue("email", formik.values.email);
+  };
+
+  const requestVerifyCode = async () => {
+    if (!formik.values.verificationCode) {
+      alert("인증번호를 입력해주세요.");
+      return;
+    }
+
+    const data = verifyCode({
+      email: formik.values.email,
+      inputCertificationCode: formik.values.verificationCode,
+    });
+
+    if (await data) {
+      setIsVerified(true);
+      alert("인증되었습니다.");
+
+      const verificationCodeInput = document.getElementById("verificationCode");
+      if (verificationCodeInput) {
+        verificationCodeInput.setAttribute("disabled", "true");
+      }
+
+      formik.setFieldValue("verificationCode", formik.values.verificationCode);
+    } else {
+      setIsVerified(false);
+      alert("인증번호가 올바르지 않습니다.");
+    }
+  };
+
   return (
     <>
       <div className={styles.create_group_container}>
@@ -112,7 +206,7 @@ export default function Signup() {
                   type="text"
                   id="groupName"
                   name="groupName"
-                  placeholder="그룹명을 입력해주세요. (5자 이상)"
+                  placeholder="그룹명을 입력해주세요. (3자 이상)"
                   value={formik.values.groupName}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -120,7 +214,7 @@ export default function Signup() {
                 <button
                   type="button"
                   className={styles.button}
-                  onClick={() => handleDuplicateCheck()}
+                  onClick={() => requestCheckDuplicateGroupName()}
                 >
                   중복확인
                 </button>
@@ -219,7 +313,7 @@ export default function Signup() {
                 <button
                   type="button"
                   className={styles.button}
-                  onClick={handleSendVerificationCode}
+                  onClick={requestSendVerificationCode}
                 >
                   발송하기
                 </button>
@@ -232,52 +326,31 @@ export default function Signup() {
             </div>
 
             <div className={styles.input_group}>
-              <label htmlFor="emailVerificationCode">인증번호</label>
+              <label htmlFor="verificationCode">인증번호</label>
               <div className={styles.input_with_button}>
                 <input
                   type="text"
-                  id="emailVerificationCode"
-                  name="emailVerificationCode"
+                  id="verificationCode"
+                  name="verificationCode"
                   placeholder="인증번호를 입력해주세요."
-                  value={formik.values.emailVerificationCode}
+                  value={formik.values.verificationCode}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
                 <button
                   type="button"
                   className={styles.button}
-                  onClick={handleVerifyCode}
+                  onClick={requestVerifyCode}
                 >
                   인증하기
                 </button>
               </div>
-              {formik.touched.emailVerificationCode &&
-                formik.errors.emailVerificationCode && (
+              {formik.touched.verificationCode &&
+                formik.errors.verificationCode && (
                   <div className={styles.error_message}>
-                    {formik.errors.emailVerificationCode}
+                    {formik.errors.verificationCode}
                   </div>
                 )}
-            </div>
-
-            <div className={styles.image_input}>
-              <label htmlFor="groupImage">그룹 이미지</label>
-              <div className={styles.image_input_container}>
-                <input
-                  type="file"
-                  id="groupImage"
-                  name="groupImage"
-                  accept="image/*"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className={styles.image_input}
-                  aria-label="그룹 이미지 업로드"
-                />
-              </div>
-              {formik.touched.groupImage && formik.errors.groupImage && (
-                <div className={styles.error_message}>
-                  {formik.errors.groupImage}
-                </div>
-              )}
             </div>
 
             <div className={styles.button_group}>
