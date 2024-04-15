@@ -4,15 +4,14 @@
 import { group } from "@/types/group/group";
 import styles from "./GroupItem.module.css";
 import Image from "next/image";
+import { firebaseStorage } from "@/utils/firebase";
 import { ref, getDownloadURL } from "firebase/storage";
-import { fireabaseStorage } from "@/utils/firebase";
 import { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
 
 export default function GroupItem(props: group) {
   const [isLoading, setIsLoading] = useState(true);
   const [groupImage, setGroupImage] = useState<string>("");
-  const firebaseStorage = fireabaseStorage;
 
   useEffect(() => {
     const func = async () => {
