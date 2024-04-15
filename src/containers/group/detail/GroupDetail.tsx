@@ -2,36 +2,34 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { group } from "@/types/group/group";
+import { groupInfo } from "@/types/group/group";
 import { Listbox, ListboxItem } from "@nextui-org/react";
 import styles from "./GroupDetail.module.css";
 import MemberManage from "./contents/MemberManage";
 import Attendance from "./contents/Attendance";
 import GroupManage from "./contents/GroupManage";
 import GroupNotice from "./contents/GroupNotice";
+import { getGroup } from "@/services/group/group";
 
 export default function GroupDetail() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [groupData, setGroupData] = useState<group | null>(null);
+  const [groupData, setGroupData] = useState<groupInfo | null>(null);
   const [selectedAction, setSelectedAction] = useState<string>("manage");
   const [selectedId, setSelectedId] = useState<number>(0);
 
   useEffect(() => {
     setSelectedId(parseInt(searchParams.get("id") || "0"));
 
-    // 추후 API로 대체
     async function fetchGroupData() {
-      // const response = await fetch(`/api/group/${id}`);
-      // const data = await response.json();
+      const data = await getGroup(selectedId);
       setGroupData({
-        // 임시 데이터
-        id: 1,
-        name: "아이사랑수학학원",
-        address: "서울특별시 구로구 항동로 2길 36, 3층",
-        memberCount: 32,
-        waitMemberCount: 5,
-        groupImage: "https://via.placeholder.com/120",
+        id: data.id,
+        name: data.name,
+        address: data.address,
+        groupImage: data.groupImage,
+        description: data.groupDescription,
+        businessNumber: data.businessNumber,
       });
     }
 
@@ -96,7 +94,7 @@ export default function GroupDetail() {
     }
   }
 
-  function renderComponent(id: number) {
+  function renderComponent(id: number, groupData: groupInfo | null) {
     switch (selectedAction) {
       case "manage":
         return <MemberManage />;
@@ -105,7 +103,7 @@ export default function GroupDetail() {
       case "notice":
         return <GroupNotice />;
       case "edit":
-        return <GroupManage id={id} />;
+        return <GroupManage id={id} groupData={groupData} />;
     }
   }
   return (
@@ -139,7 +137,7 @@ export default function GroupDetail() {
           </div>
 
           <div className={styles.group_info_container}>
-            {renderComponent(selectedId)}
+            {renderComponent(selectedId, groupData)}
           </div>
         </div>
       ) : (
