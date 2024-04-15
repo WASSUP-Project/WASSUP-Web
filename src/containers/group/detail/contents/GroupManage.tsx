@@ -128,6 +128,9 @@ export default function GroupManage(props: GroupManageProps) {
     } catch (error) {
       console.error("[Error] 그룹 정보 수정 실패:", error);
     }
+
+    window.location.reload();
+    alert("그룹 정보가 수정되었습니다.");
   };
 
   const requestDeleteGroup = () => {
@@ -227,6 +230,7 @@ export default function GroupManage(props: GroupManageProps) {
                   name="groupImage"
                   accept="image/*"
                   onChange={(event) => {
+                    formik.setFieldValue("groupImage", event.target.files?.[0]);
                     setGroupImage(event.target.files?.[0] || null);
                   }}
                   onBlur={formik.handleBlur}
