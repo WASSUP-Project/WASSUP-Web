@@ -15,7 +15,7 @@ export default function GroupItem(props: group) {
 
   useEffect(() => {
     const func = async () => {
-      const reference = ref(firebaseStorage, props.groupImage);
+      const reference = ref(firebaseStorage, props.imageUrl);
       await getDownloadURL(reference).then((url: any) => {
         setGroupImage(url);
         setIsLoading(false);
@@ -38,14 +38,14 @@ export default function GroupItem(props: group) {
         />
       )}
       <div className={styles.group_info}>
-        <div className={styles.group_name}>{props.name}</div>
+        <div className={styles.group_name}>{props.groupName}</div>
         <div className={styles.group_address}>{props.address}</div>
         <div className={styles.group_member}>
           <div className={styles.group_member_count}>
-            인원 <b>{props.memberCount}</b>명
+            인원 <b>{props.totalMember}</b>명
           </div>
           <div className={styles.group_wait_member_count}>
-            가입 대기 중인 인원 <b>{props.waitMemberCount}</b>명
+            가입 대기 중인 인원 <b>{props.waitingMember}</b>명
           </div>
         </div>
       </div>

@@ -5,6 +5,13 @@
     height: 100vh;
 }
 
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .group_title {
     font-size: 35px;
     font-weight: 700;

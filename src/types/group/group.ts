@@ -1,10 +1,10 @@
 export type group = {
     id: number;
-    name: string;
+    groupName: string;
     address: string;
-    memberCount: number;
-    waitMemberCount: number;
-    groupImage: string;
+    totalMember: number;
+    waitingMember: number;
+    imageUrl: string;
 };
 
 export type groupInfo = {
