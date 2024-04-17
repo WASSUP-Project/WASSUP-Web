@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { groupInfo } from "@/types/group/group";
-import { Listbox, ListboxItem } from "@nextui-org/react";
+import { Listbox, ListboxItem, Spinner } from "@nextui-org/react";
 import styles from "./GroupDetail.module.css";
 import MemberManage from "./contents/MemberManage";
 import Attendance from "./contents/Attendance";
@@ -141,7 +141,9 @@ export default function GroupDetail() {
           </div>
         </div>
       ) : (
-        <div>Loading...</div>
+        <div className={styles.loading}>
+          <Spinner size="lg" />
+        </div>
       )}
     </>
   );

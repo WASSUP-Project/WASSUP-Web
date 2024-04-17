@@ -134,3 +134,17 @@ export const deleteGroup = async (groupId: number) => {
         console.error(error);
     }
 };
+
+export const getMyGroups = async () => {
+    try {
+        const response = await axios.get(`/api/groups/my`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+};
