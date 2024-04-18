@@ -8,8 +8,8 @@ export default function Attendance() {
       <h1 className={styles.title}>출결 관리</h1>
       <div className={styles.container}>
         <div className={styles.buttonContainer}>
-          <Button color="primary">
-            <Link href="/attendance">출석 화면</Link>
+          <Button className={styles.button}>
+            <Link href="/attendance">출석</Link>
           </Button>
         </div>
         <div className={styles.summary}>

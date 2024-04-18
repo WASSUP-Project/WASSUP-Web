@@ -97,7 +97,7 @@ export default function GroupDetail() {
   function renderComponent(id: number, groupData: groupInfo | null) {
     switch (selectedAction) {
       case "manage":
-        return <MemberManage />;
+        return <MemberManage id={id} />;
       case "attendance":
         return <Attendance />;
       case "notice":

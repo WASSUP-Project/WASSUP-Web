@@ -57,13 +57,13 @@ export default function GroupNotice() {
     <>
       <h1 className={styles.title}>공지사항</h1>
       <div className={styles.container}>
-        <div className={styles.button_group}>
-          <Button color="primary" className={styles.button} onClick={onOpen}>
-            공지 작성
-          </Button>
-        </div>
         <div className={styles.notice_container}>
-          <div className={styles.title}>보낸 이력</div>
+          <div className={styles.notice_header}>
+            <div className={styles.title}>보낸 이력</div>
+            <Button color="primary" className={styles.button} onClick={onOpen}>
+              공지 작성
+            </Button>
+          </div>
           {notices.length === 0 ? (
             <div className={styles.empty_notice}>공지사항이 없습니다.</div>
           ) : (
@@ -95,10 +95,8 @@ export default function GroupNotice() {
                 </>
               </ModalBody>
               <ModalFooter>
-                <Button color="secondary" onPress={onClose}>
-                  돌아가기
-                </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button onPress={onClose}>돌아가기</Button>
+                <Button className={styles.send_button} onPress={onClose}>
                   전송하기
                 </Button>
               </ModalFooter>
