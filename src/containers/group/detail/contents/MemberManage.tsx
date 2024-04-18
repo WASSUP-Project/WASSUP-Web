@@ -16,14 +16,22 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import usePagination from "@/hooks/usePagination";
+import MemberInvite from "./MemberInvite";
 
-export default function MemberManage() {
+type ManageType = "info" | "invite";
+
+type MemberManageProps = {
+  id: number;
+};
+
+export default function MemberManage(props: MemberManageProps) {
   const [members, setMembers] = useState<member[]>([]);
   const [selectedMember, setSelectedMember] = useState<member | null>(null);
   const [searchKeyword, setSearchKeyword] = useState("");
   const { currentPage, totalPages, setPage } = usePagination(1, 16);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [selctedModal, setSelectedModal] = useState<string>("");
+  const [selectedModal, setSelectedModal] = useState<string>("");
+  const [selectedPage, setSelectedPage] = useState<ManageType>("info");
 
   const filteredMembers = useMemo(() => {
     return members.filter((member) =>
@@ -187,148 +195,179 @@ export default function MemberManage() {
   return (
     <>
       <div className={styles.title}>인원 관리</div>
-      <div className={styles.container}>
-        <div className={styles.content}>
-          <div className={styles.header}>
-            <div className={styles.search}>
-              <input
-                type="text"
-                placeholder="이름 검색"
-                value={searchKeyword}
-                onChange={handleSearch}
-              />
-            </div>
-            <Button color="primary" className={styles.button}>
-              인원 추가
-            </Button>
-          </div>
-
-          <div className={styles.list}>
-            {filteredMembers.map((member) => (
-              <>
-                <div className={styles.list_item}>
-                  <div
-                    key={member.id}
-                    className={styles.list_item_name}
-                    onClick={() => handleMemberClick(member.id)}
-                  >
-                    {member.name}
-                  </div>
-                  <div className={styles.buttons}>
-                    <Image
-                      src="/message.png"
-                      alt="message"
-                      width={36}
-                      height={36}
-                      className={styles.button_image}
-                      onClick={() => handleSendMessage(member.id)}
-                    ></Image>
-                    <Image
-                      src={"/edit.png"}
-                      alt="edit"
-                      width={36}
-                      height={36}
-                      className={styles.button_image}
-                      onClick={() => handleEditMember(member.id)}
-                    ></Image>
-                  </div>
-                </div>
-              </>
-            ))}
-          </div>
-
-          <div className={styles.pagination}>
-            <Pagination
-              showControls
-              total={totalPages}
-              initialPage={1}
-              onChange={(page) => setPage(page)}
-            />
-          </div>
-        </div>
-
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-          <ModalContent>
-            {(onClose) =>
-              selctedModal === "info" ? (
-                <>
-                  <ModalHeader className="flex flex-col gap-0">
-                    인원 정보
-                  </ModalHeader>
-                  <ModalBody className={styles.modal__body}>
-                    {selectedMember && (
-                      <>
-                        <h3 className={styles.modal__content_Title}>이름</h3>
-                        <p className={styles.member_info}>
-                          {selectedMember.name}
-                        </p>
-                        <h3 className={styles.modal__content_Title}>
-                          전화번호
-                        </h3>
-                        <p className={styles.member_info}>
-                          {selectedMember.phone}
-                        </p>
-                        <h3 className={styles.modal__content_Title}>
-                          생년월일
-                        </h3>
-                        <p className={styles.member_info}>
-                          {selectedMember.birth}
-                        </p>
-                        <h3 className={styles.modal__content_Title}>
-                          특이사항
-                        </h3>
-                        <p className={styles.member_info}>
-                          {selectedMember.description}
-                        </p>
-                      </>
-                    )}
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button color="primary" onPress={onClose}>
-                      확인
-                    </Button>
-                  </ModalFooter>
-                </>
-              ) : (
-                <>
-                  <ModalHeader className="flex flex-col gap-0">
-                    메시지 전송
-                  </ModalHeader>
-                  <ModalBody className={styles.modal__body}>
-                    {selectedMember && (
-                      <>
-                        <h3 className={styles.modal__content_Title}>이름</h3>
-                        <p className={styles.member_info}>
-                          {selectedMember.name}
-                        </p>
-                        <h3 className={styles.modal__content_Title}>
-                          전화번호
-                        </h3>
-                        <p className={styles.member_info}>
-                          {selectedMember.phone}
-                        </p>
-                        <h3 className={styles.modal__content_Title}>메시지</h3>
-                        <textarea
-                          className={styles.message_textarea}
-                          placeholder="메시지를 입력해주세요."
-                        ></textarea>
-                      </>
-                    )}
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button color="secondary" onPress={onClose}>
-                      돌아가기
-                    </Button>
-                    <Button color="primary" onPress={onClose}>
-                      전송하기
-                    </Button>
-                  </ModalFooter>
-                </>
-              )
-            }
-          </ModalContent>
-        </Modal>
+      <div className={styles.switch}>
+        <Button
+          className={
+            selectedPage === "info"
+              ? styles.switch_button_active
+              : styles.switch_button
+          }
+          onPress={() => setSelectedPage("info")}
+        >
+          인원 확인
+        </Button>
+        <Button
+          className={
+            selectedPage === "invite"
+              ? styles.switch_button_active
+              : styles.switch_button
+          }
+          onPress={() => setSelectedPage("invite")}
+        >
+          초대하기
+        </Button>
       </div>
+      {selectedPage == "info" ? (
+        <>
+          <div className={styles.container}>
+            <div className={styles.content}>
+              <div className={styles.header}>
+                <div className={styles.search}>
+                  <input
+                    type="text"
+                    placeholder="이름 검색"
+                    value={searchKeyword}
+                    onChange={handleSearch}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.list}>
+                {filteredMembers.map((member) => (
+                  <>
+                    <div className={styles.list_item}>
+                      <div
+                        key={member.id}
+                        className={styles.list_item_name}
+                        onClick={() => handleMemberClick(member.id)}
+                      >
+                        {member.name}
+                      </div>
+                      <div className={styles.buttons}>
+                        <Image
+                          src="/message.png"
+                          alt="message"
+                          width={36}
+                          height={36}
+                          className={styles.button_image}
+                          onClick={() => handleSendMessage(member.id)}
+                        ></Image>
+                        <Image
+                          src="/edit.png"
+                          alt="edit"
+                          width={36}
+                          height={36}
+                          className={styles.button_image}
+                          onClick={() => handleEditMember(member.id)}
+                        ></Image>
+                      </div>
+                    </div>
+                  </>
+                ))}
+              </div>
+
+              <div className={styles.pagination}>
+                <Pagination
+                  showControls
+                  total={totalPages}
+                  initialPage={1}
+                  onChange={(page) => setPage(page)}
+                />
+              </div>
+            </div>
+
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+              <ModalContent>
+                {(onClose) =>
+                  selectedModal === "info" ? (
+                    <>
+                      <ModalHeader className="flex flex-col gap-0">
+                        인원 정보
+                      </ModalHeader>
+                      <ModalBody className={styles.modal__body}>
+                        {selectedMember && (
+                          <>
+                            <h3 className={styles.modal__content_Title}>
+                              이름
+                            </h3>
+                            <p className={styles.member_info}>
+                              {selectedMember.name}
+                            </p>
+                            <h3 className={styles.modal__content_Title}>
+                              전화번호
+                            </h3>
+                            <p className={styles.member_info}>
+                              {selectedMember.phone}
+                            </p>
+                            <h3 className={styles.modal__content_Title}>
+                              생년월일
+                            </h3>
+                            <p className={styles.member_info}>
+                              {selectedMember.birth}
+                            </p>
+                            <h3 className={styles.modal__content_Title}>
+                              특이사항
+                            </h3>
+                            <p className={styles.member_info}>
+                              {selectedMember.description}
+                            </p>
+                          </>
+                        )}
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color="primary" onPress={onClose}>
+                          확인
+                        </Button>
+                      </ModalFooter>
+                    </>
+                  ) : (
+                    <>
+                      <ModalHeader className="flex flex-col gap-0">
+                        메시지 전송
+                      </ModalHeader>
+                      <ModalBody className={styles.modal__body}>
+                        {selectedMember && (
+                          <>
+                            <h3 className={styles.modal__content_Title}>
+                              이름
+                            </h3>
+                            <p className={styles.member_info}>
+                              {selectedMember.name}
+                            </p>
+                            <h3 className={styles.modal__content_Title}>
+                              전화번호
+                            </h3>
+                            <p className={styles.member_info}>
+                              {selectedMember.phone}
+                            </p>
+                            <h3 className={styles.modal__content_Title}>
+                              메시지
+                            </h3>
+                            <textarea
+                              className={styles.message_textarea}
+                              placeholder="메시지를 입력해주세요."
+                            ></textarea>
+                          </>
+                        )}
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color="secondary" onPress={onClose}>
+                          돌아가기
+                        </Button>
+                        <Button color="primary" onPress={onClose}>
+                          전송하기
+                        </Button>
+                      </ModalFooter>
+                    </>
+                  )
+                }
+              </ModalContent>
+            </Modal>
+          </div>
+        </>
+      ) : (
+        <MemberInvite id={props.id} />
+      )}
     </>
   );
 }
