@@ -80,3 +80,30 @@ export const getGroupMembers = async (id: number) => {
         console.error(error);
     }
 };
+
+export type RequestJoinGroup = {
+    name: string;
+    phoneNumber: string;
+    birth: string;
+    specifics: string;
+    groupCode: string;
+};
+
+export const joinGroup = async (requestJoinGroup: RequestJoinGroup) => {
+    try {
+        const response = await axios.post(`/api/members/join`, {
+            name: requestJoinGroup.name,
+            phoneNumber: requestJoinGroup.phoneNumber,
+            birth: requestJoinGroup.birth,
+            specifics: requestJoinGroup.specifics,
+            groupCode: requestJoinGroup.groupCode,
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return response.status === 200;
+    } catch (error) {
+        console.error(error);
+    }
+}
