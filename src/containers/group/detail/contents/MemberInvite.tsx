@@ -12,7 +12,13 @@ import {
 import { member } from "@/types/user/member";
 import styles from "./MemberInvite.module.css";
 import { useEffect, useState } from "react";
-import { getWaitingMembers } from "@/services/invite/invite";
+import {
+  RequestSendInvite,
+  acceptInvite,
+  getWaitingMembers,
+  rejectInvite,
+  sendInviteMessage,
+} from "@/services/invite/invite";
 
 type MemberInviteProps = {
   id: number;
@@ -20,45 +26,46 @@ type MemberInviteProps = {
 
 export default function MemberInvite(props: MemberInviteProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [waitingMembers, setWaitingMembers] = useState<member[]>([
-    {
-      id: 1,
-      name: "김철수",
-      phone: "01012341234",
-      birth: "1999-01-01",
-      description: "안녕하세요",
-    },
-    {
-      id: 2,
-      name: "김영희",
-      phone: "01012341234",
-      birth: "1999-01-01",
-      description: "안녕하세요",
-    },
-    {
-      id: 3,
-      name: "김민수",
-      phone: "01012341234",
-      birth: "1999-01-01",
-      description: "안녕하세요",
-    },
-  ]);
+  const [waitingMembers, setWaitingMembers] = useState<member[]>([]);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  //   useEffect(() => {
-  //     const data = getWaitingMembers(props.id);
-  //     data.then((data) => {
-  //       setWaitingMembers(data);
-  //       setIsLoading(false);
-  //     });
-  //   }, [props.id]);
+  useEffect(() => {
+    const data = getWaitingMembers(props.id);
+    data.then((data) => {
+      setWaitingMembers(data);
+      setIsLoading(false);
+    });
+  }, [props.id]);
+
+  function requestSendInviteMessage(request: RequestSendInvite) {
+    request.link = process.env.NEXT_PUBLIC_INVITE_URL!;
+
+    const data = sendInviteMessage(request);
+    data.then(() => {
+      alert("초대 메시지가 전송되었습니다.");
+      setPhoneNumber("");
+    });
+
+    onOpenChange();
+  }
 
   function requestAcceptMember(id: number) {
-    console.log("수락", id);
+    const data = acceptInvite(id);
+    data.then(() => {
+      setWaitingMembers(waitingMembers.filter((member) => member.id !== id));
+    });
+
+    alert("수락되었습니다.");
   }
 
   function requestRejectMember(id: number) {
-    console.log("거절", id);
+    const data = rejectInvite(id);
+    data.then(() => {
+      setWaitingMembers(waitingMembers.filter((member) => member.id !== id));
+    });
+
+    alert("거절되었습니다.");
   }
 
   return isLoading ? (
@@ -88,7 +95,7 @@ export default function MemberInvite(props: MemberInviteProps) {
                 <div className={styles.member_info}>
                   <p>{member.name}</p>
                   &nbsp;&nbsp;&nbsp;&nbsp;
-                  <p>{member.phone}</p>
+                  <p>{member.phoneNumber}</p>
                 </div>
                 <div className={styles.member_buttons}>
                   <Button
@@ -127,12 +134,24 @@ export default function MemberInvite(props: MemberInviteProps) {
                     type="text"
                     className={styles.modal__content_input}
                     placeholder="전화번호를 입력해주세요. (01012341234)"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
                   />
                 </>
               </ModalBody>
               <ModalFooter>
                 <Button onPress={onClose}>돌아가기</Button>
-                <Button className={styles.accept_button} onPress={onClose}>
+                <Button
+                  className={styles.accept_button}
+                  onPress={onClose}
+                  onClick={() =>
+                    requestSendInviteMessage({
+                      id: props.id,
+                      phoneNumber: phoneNumber,
+                      link: "",
+                    })
+                  }
+                >
                   전송하기
                 </Button>
               </ModalFooter>

@@ -4,43 +4,53 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import styles from "./GroupInvite.module.css";
 import Spacer from "@/components/Spacer";
+import { joinGroup } from "@/services/invite/invite";
 
 const validationSchema = yup.object().shape({
-  childName: yup.string().required("자녀 이름을 입력해주세요."),
+  name: yup.string().required("자녀 이름을 입력해주세요."),
   phoneNumber: yup
     .string()
     .required("전화번호를 입력해주세요.")
     .matches(/^\d{10,11}$/, "유효한 전화번호를 입력해주세요."),
-  childBirth: yup.string().required("자녀 생일을 입력해주세요."),
-  specialNote: yup.string().optional(),
+  birth: yup.string().required("자녀 생일을 입력해주세요."),
+  specifics: yup.string().optional(),
   groupCode: yup.string().required("그룹 고유 코드를 입력해주세요."),
 });
 
 export default function GroupInvite() {
   const formik = useFormik({
     initialValues: {
-      childName: "",
+      name: "",
       phoneNumber: "",
-      childBirth: "",
-      specialNote: "",
+      birth: "",
+      specifics: "",
       groupCode: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log("Form submitted:", values);
-      // API 연결
-      // signupChild(values);
     },
   });
 
-  const requestSignup = () => {
+  const requestJoinGroup = async () => {
     if (!formik.isValid) {
       return;
     }
 
-    console.log("Signup requested:", formik.values);
-    // API 연결
-    // signupChild(formik.values);
+    const data = joinGroup({
+      name: formik.values.name,
+      phoneNumber: formik.values.phoneNumber,
+      birth: formik.values.birth,
+      specifics: formik.values.specifics,
+      groupCode: formik.values.groupCode,
+    });
+
+    if (await data) {
+      alert("가입 신청이 완료되었습니다.");
+      window.location.href = "/";
+    } else {
+      alert("가입 신청에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -58,20 +68,18 @@ export default function GroupInvite() {
         <div className={styles.form_container}>
           <form className={styles.form} onSubmit={formik.handleSubmit}>
             <div className={styles.input_group}>
-              <label htmlFor="childName">자녀 이름</label>
+              <label htmlFor="name">자녀 이름</label>
               <input
                 type="text"
-                id="childName"
-                name="childName"
+                id="name"
+                name="name"
                 placeholder="자녀 이름을 입력해주세요."
-                value={formik.values.childName}
+                value={formik.values.name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.childName && formik.errors.childName && (
-                <div className={styles.error_message}>
-                  {formik.errors.childName}
-                </div>
+              {formik.touched.name && formik.errors.name && (
+                <div className={styles.error_message}>{formik.errors.name}</div>
               )}
             </div>
             <div className={styles.input_group}>
@@ -92,34 +100,34 @@ export default function GroupInvite() {
               )}
             </div>
             <div className={styles.input_group}>
-              <label htmlFor="childBirth">자녀 생일</label>
+              <label htmlFor="birth">자녀 생일</label>
               <input
                 type="date"
-                id="childBirth"
-                name="childBirth"
-                value={formik.values.childBirth}
+                id="birth"
+                name="birth"
+                value={formik.values.birth}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.childBirth && formik.errors.childBirth && (
+              {formik.touched.birth && formik.errors.birth && (
                 <div className={styles.error_message}>
-                  {formik.errors.childBirth}
+                  {formik.errors.birth}
                 </div>
               )}
             </div>
             <div className={styles.input_group}>
-              <label htmlFor="specialNote">자녀 특이사항</label>
+              <label htmlFor="specifics">자녀 특이사항</label>
               <textarea
-                id="specialNote"
-                name="specialNote"
+                id="specifics"
+                name="specifics"
                 placeholder="자녀의 특이사항을 입력해주세요."
-                value={formik.values.specialNote}
+                value={formik.values.specifics}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.specialNote && formik.errors.specialNote && (
+              {formik.touched.specifics && formik.errors.specifics && (
                 <div className={styles.error_message}>
-                  {formik.errors.specialNote}
+                  {formik.errors.specifics}
                 </div>
               )}
             </div>
@@ -145,7 +153,7 @@ export default function GroupInvite() {
               <button
                 type="submit"
                 className={styles.submit_button}
-                onClick={requestSignup}
+                onClick={requestJoinGroup}
               >
                 가입하기
               </button>

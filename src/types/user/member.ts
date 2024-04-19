@@ -1,7 +1,7 @@
 export type member = {
     id: number;
     name: string;
-    phone: string;
+    phoneNumber: string;
     birth: string;
-    description: string;
+    specifics: string;
 };
