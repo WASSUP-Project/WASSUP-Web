@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -17,6 +18,7 @@ import {
 } from "@nextui-org/react";
 import usePagination from "@/hooks/usePagination";
 import MemberInvite from "./MemberInvite";
+import { getGroupMembers } from "@/services/invite/invite";
 
 type ManageType = "info" | "invite";
 
@@ -26,162 +28,55 @@ type MemberManageProps = {
 
 export default function MemberManage(props: MemberManageProps) {
   const [members, setMembers] = useState<member[]>([]);
+  const [currentMembers, setCurrentMembers] = useState<member[]>([]);
   const [selectedMember, setSelectedMember] = useState<member | null>(null);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const { currentPage, totalPages, setPage } = usePagination(1, 16);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedModal, setSelectedModal] = useState<string>("");
   const [selectedPage, setSelectedPage] = useState<ManageType>("info");
+  const { currentPage, totalPages, setTotalItems, setPage } = usePagination(1);
 
   const filteredMembers = useMemo(() => {
-    return members.filter((member) =>
-      member.name.toLowerCase().includes(searchKeyword.toLowerCase())
-    );
+    if (searchKeyword) {
+      return members.filter((member) =>
+        member.name.toLowerCase().includes(searchKeyword.toLowerCase())
+      );
+    } else {
+      return members;
+    }
   }, [members, searchKeyword]);
 
   useEffect(() => {
-    // 추후 API로 대체
-    const fetchMembers = async (currentPage: number) => {
-      // const response = await fetch("/api/members");
-      // const data = await response.json();
-      // 임시 데이터
-      if (currentPage === 2) {
-        setMembers([
-          {
-            id: 9,
-            name: "김민수",
-            phone: "010-9012-3456",
-            birth: "2008-09-09",
-            description: "김민수입니다.",
-          },
-          {
-            id: 10,
-            name: "박민수",
-            phone: "010-0123-4567",
-            birth: "2009-10-10",
-            description: "박민수입니다.",
-          },
-          {
-            id: 11,
-            name: "이민수",
-            phone: "010-1234-5678",
-            birth: "2010-11-11",
-            description: "이민수입니다.",
-          },
-          {
-            id: 12,
-            name: "정민수",
-            phone: "010-2345-6789",
-            birth: "2011-12-12",
-            description: "정민수입니다.",
-          },
-          {
-            id: 13,
-            name: "김영수",
-            phone: "010-3456-7890",
-            birth: "2012-01-01",
-            description: "김영수입니다.",
-          },
-          {
-            id: 14,
-            name: "박영수",
-            phone: "010-4567-8901",
-            birth: "2013-02-02",
-            description: "박영수입니다.",
-          },
-          {
-            id: 15,
-            name: "이영희",
-            phone: "010-5678-9012",
-            birth: "2014-03-03",
-            description: "이영희입니다.",
-          },
-          {
-            id: 16,
-            name: "정영희",
-            phone: "010-6789-0123",
-            birth: "2015-04-04",
-            description: "정영희입니다.",
-          },
-        ]);
-      } else {
-        setMembers([
-          {
-            id: 1,
-            name: "홍길동",
-            phone: "010-1234-5678",
-            birth: "2000-01-01",
-            description: "홍길동입니다.",
-          },
-          {
-            id: 2,
-            name: "김철수",
-            phone: "010-2345-6789",
-            birth: "2001-02-02",
-            description: "김철수입니다.",
-          },
-          {
-            id: 3,
-            name: "이영희",
-            phone: "010-3456-7890",
-            birth: "2002-03-03",
-            description: "이영희입니다.",
-          },
-          {
-            id: 4,
-            name: "박영수",
-            phone: "010-4567-8901",
-            birth: "2003-04-04",
-            description: "박영수입니다.",
-          },
-          {
-            id: 5,
-            name: "정민수",
-            phone: "010-5678-9012",
-            birth: "2004-05-05",
-            description: "정민수입니다.",
-          },
-          {
-            id: 6,
-            name: "김영수",
-            phone: "010-6789-0123",
-            birth: "2005-06-06",
-            description: "김영수입니다.",
-          },
-          {
-            id: 7,
-            name: "박민수",
-            phone: "010-7890-1234",
-            birth: "2006-07-07",
-            description: "박민수입니다.",
-          },
-          {
-            id: 8,
-            name: "이민수",
-            phone: "010-8901-2345",
-            birth: "2007-08-08",
-            description: "이민수입니다.",
-          },
-        ]);
-      }
-    };
+    const data = getGroupMembers(props.id);
+    data.then((data) => {
+      setMembers(data);
+    });
+  }, [props.id, selectedPage]);
 
-    fetchMembers(currentPage);
-  }, [currentPage]);
+  useEffect(() => {
+    const start = (currentPage - 1) * 7;
+    const end = start + 7;
+    setCurrentMembers(filteredMembers.slice(start, end));
+    setTotalItems(filteredMembers.length);
+  }, [currentPage, filteredMembers]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
   };
 
   const handleMemberClick = (id: number) => {
-    setSelectedMember(members.find((member) => member.id === id) || null);
+    setSelectedMember(
+      filteredMembers.find((member) => member.id === id) || null
+    );
     setSelectedModal("info");
     onOpen();
     console.log(`Member ${id} clicked!`);
   };
 
   const handleSendMessage = (id: number) => {
-    setSelectedMember(members.find((member) => member.id === id) || null);
+    setSelectedMember(
+      filteredMembers.find((member) => member.id === id) || null
+    );
     setSelectedModal("message");
     onOpen();
     console.log(`Send message to member ${id}`);
@@ -217,7 +112,7 @@ export default function MemberManage(props: MemberManageProps) {
           초대하기
         </Button>
       </div>
-      {selectedPage == "info" ? (
+      {selectedPage === "info" ? (
         <>
           <div className={styles.container}>
             <div className={styles.content}>
@@ -233,47 +128,44 @@ export default function MemberManage(props: MemberManageProps) {
               </div>
 
               <div className={styles.list}>
-                {filteredMembers.map((member) => (
-                  <>
-                    <div className={styles.list_item}>
-                      <div
-                        key={member.id}
-                        className={styles.list_item_name}
-                        onClick={() => handleMemberClick(member.id)}
-                      >
-                        {member.name}
-                      </div>
-                      <div className={styles.buttons}>
-                        <Image
-                          src="/message.png"
-                          alt="message"
-                          width={36}
-                          height={36}
-                          className={styles.button_image}
-                          onClick={() => handleSendMessage(member.id)}
-                        ></Image>
-                        <Image
-                          src="/edit.png"
-                          alt="edit"
-                          width={36}
-                          height={36}
-                          className={styles.button_image}
-                          onClick={() => handleEditMember(member.id)}
-                        ></Image>
-                      </div>
+                {filteredMembers.length === 0 && <div>인원이 없습니다.</div>}
+                {currentMembers.map((member) => (
+                  <div key={member.id} className={styles.list_item}>
+                    <div
+                      className={styles.list_item_name}
+                      onClick={() => handleMemberClick(member.id)}
+                    >
+                      {member.name}
                     </div>
-                  </>
+                    <div className={styles.buttons}>
+                      <Image
+                        src="/message.png"
+                        alt="message"
+                        width={36}
+                        height={36}
+                        className={styles.button_image}
+                        onClick={() => handleSendMessage(member.id)}
+                      />
+                      <Image
+                        src="/edit.png"
+                        alt="edit"
+                        width={36}
+                        height={36}
+                        className={styles.button_image}
+                        onClick={() => handleEditMember(member.id)}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
-
-              <div className={styles.pagination}>
-                <Pagination
-                  showControls
-                  total={totalPages}
-                  initialPage={1}
-                  onChange={(page) => setPage(page)}
-                />
-              </div>
+            </div>
+            <div className={styles.pagination}>
+              <Pagination
+                showControls
+                total={totalPages}
+                initialPage={1}
+                onChange={(page) => setPage(page)}
+              />
             </div>
 
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -297,7 +189,7 @@ export default function MemberManage(props: MemberManageProps) {
                               전화번호
                             </h3>
                             <p className={styles.member_info}>
-                              {selectedMember.phone}
+                              {selectedMember.phoneNumber}
                             </p>
                             <h3 className={styles.modal__content_Title}>
                               생년월일
@@ -309,7 +201,7 @@ export default function MemberManage(props: MemberManageProps) {
                               특이사항
                             </h3>
                             <p className={styles.member_info}>
-                              {selectedMember.description}
+                              {selectedMember.specifics}
                             </p>
                           </>
                         )}
@@ -338,7 +230,7 @@ export default function MemberManage(props: MemberManageProps) {
                               전화번호
                             </h3>
                             <p className={styles.member_info}>
-                              {selectedMember.phone}
+                              {selectedMember.phoneNumber}
                             </p>
                             <h3 className={styles.modal__content_Title}>
                               메시지
