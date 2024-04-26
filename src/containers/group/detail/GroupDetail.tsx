@@ -25,9 +25,9 @@ export default function GroupDetail() {
       const data = await getGroup(selectedId);
       setGroupData({
         id: data.id,
-        name: data.name,
+        name: data.groupName,
         address: data.address,
-        groupImage: data.groupImage,
+        groupImage: data.imageUrl,
         description: data.groupDescription,
         businessNumber: data.businessNumber,
       });
