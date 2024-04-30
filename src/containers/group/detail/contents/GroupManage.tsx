@@ -29,7 +29,6 @@ const validationSchema = yup.object().shape({
 
 export default function GroupManage(props: GroupManageProps) {
   const [groupDetail, setGroupDetail] = useState<groupInfo | null>(null);
-  const [groupImage, setGroupImage] = useState<File | null>(null);
   const [imageName, setImageName] = useState<string>("");
 
   useEffect(() => {
@@ -101,22 +100,19 @@ export default function GroupManage(props: GroupManageProps) {
     });
   };
 
-  const uploadGroupImage = () => {
-    if (!groupImage) {
+  const uploadGroupImage = (imageFile: File | null) => {
+    if (!imageFile) {
       return;
     }
     const uploadFileName = uuid() + ".png";
     setImageName(uploadFileName);
     const imageRef = ref(firebaseStorage, uploadFileName);
-    uploadBytes(imageRef, groupImage);
+    uploadBytes(imageRef, imageFile);
   };
 
   const requestUpdateGroup = async () => {
     try {
-      if (groupImage) {
-        uploadGroupImage();
-      }
-      const response = await updateGroup(props.id, {
+      const response = updateGroup(props.id, {
         description: formik.values.description,
         address: formik.values.address + " " + formik.values.addressDetail,
         imageUrl: imageName || "default.png",
@@ -231,7 +227,7 @@ export default function GroupManage(props: GroupManageProps) {
                   accept="image/*"
                   onChange={(event) => {
                     formik.setFieldValue("groupImage", event.target.files?.[0]);
-                    setGroupImage(event.target.files?.[0] || null);
+                    uploadGroupImage(event.target.files?.[0] as File);
                   }}
                   onBlur={formik.handleBlur}
                   className={styles.image_input}
