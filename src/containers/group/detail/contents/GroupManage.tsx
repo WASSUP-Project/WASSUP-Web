@@ -6,13 +6,14 @@ import * as yup from "yup";
 import { groupInfo } from "@/types/group/group";
 import styles from "./GroupManage.module.css";
 import { useState, useEffect } from "react";
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { deleteGroup, updateGroup } from "@/services/group/group";
 
 import { v4 as uuid } from "uuid";
-import { ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { firebaseStorage } from "@/utils/firebase";
 import { useDaumPostcodePopup } from "react-daum-postcode";
+import Image from "next/image";
 
 type GroupManageProps = {
   id: number;
@@ -30,6 +31,9 @@ const validationSchema = yup.object().shape({
 export default function GroupManage(props: GroupManageProps) {
   const [groupDetail, setGroupDetail] = useState<groupInfo | null>(null);
   const [imageName, setImageName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [groupImage, setGroupImage] = useState<string>("");
+  const [previewImage, setPreviewImage] = useState<File>();
 
   useEffect(() => {
     const fetchGroup = async () => {
@@ -41,6 +45,11 @@ export default function GroupManage(props: GroupManageProps) {
           addressDetail: props.groupData?.address.split(") ")[1] || "",
           groupImage: props.groupData?.groupImage || "",
           businessNumber: props.groupData?.businessNumber || "",
+        });
+        const reference = ref(firebaseStorage, props.groupData?.groupImage);
+        await getDownloadURL(reference).then((url: any) => {
+          setGroupImage(url);
+          setIsLoading(false);
         });
       } catch (error) {
         console.error("[Error] 그룹 정보 불러오기 실패:", error);
@@ -108,6 +117,7 @@ export default function GroupManage(props: GroupManageProps) {
     setImageName(uploadFileName);
     const imageRef = ref(firebaseStorage, uploadFileName);
     uploadBytes(imageRef, imageFile);
+    setPreviewImage(imageFile);
   };
 
   const requestUpdateGroup = async () => {
@@ -219,6 +229,43 @@ export default function GroupManage(props: GroupManageProps) {
 
             <div className={styles.image_input}>
               <label htmlFor="groupImage">그룹 이미지</label>
+              <div className={styles.image_container}>
+                {isLoading ? (
+                  <div className={styles.loading}>
+                    <Spinner size="lg" />
+                  </div>
+                ) : (
+                  <Image
+                    src={groupImage}
+                    alt="groupImage"
+                    width={100}
+                    height={100}
+                    className={styles.image}
+                  />
+                )}
+                {previewImage && (
+                  <Image
+                    src="/rightArrow.png"
+                    alt="previewImage"
+                    width={30}
+                    height={30}
+                    className={styles.mini_image}
+                  />
+                )}
+                <div className={styles.preview_image}>
+                  {previewImage && (
+                    <>
+                      <Image
+                        src={URL.createObjectURL(previewImage)}
+                        alt="previewImage"
+                        width={100}
+                        height={100}
+                        className={styles.image}
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
               <div className={styles.image_input_container}>
                 <input
                   type="file"
