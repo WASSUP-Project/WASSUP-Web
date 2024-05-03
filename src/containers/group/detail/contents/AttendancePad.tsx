@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./AttendancePad.module.css";
 import {
   Modal,
@@ -20,6 +21,29 @@ export default function AttendancePad() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [attendanceType, setAttendanceType] = useState<AttendanceType>("ok");
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const { key } = event;
+      if (/^\d$/.test(key)) {
+        if (inputNumber.length < 4) {
+          setInputNumber((prev) => prev + key);
+        }
+      } else if (key === "Backspace") {
+        setInputNumber((prev) => prev.slice(0, -1));
+      } else if (key === "Enter" && !isOpen) {
+        handleConfirmClick();
+      } else if (key === "Enter" && isOpen) {
+        onOpenChange();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [inputNumber]);
+
   const handleNumberClick = (number: number) => {
     if (inputNumber.length < 4) {
       setInputNumber(inputNumber + number);
@@ -28,6 +52,10 @@ export default function AttendancePad() {
 
   const handlePreviousClick = () => {
     setInputNumber(inputNumber.slice(0, -1));
+  };
+
+  const handleResetClick = () => {
+    setInputNumber("");
   };
 
   const handleConfirmClick = () => {
@@ -48,13 +76,16 @@ export default function AttendancePad() {
   return (
     <div className={styles.container}>
       <div className={styles.contents}>
+        <h1 className={styles.title}>
+          <span>휴대폰 번호 뒤 4자리</span>를 입력해주세요
+        </h1>
         <div className={styles.inputNumber}>
-          <input
-            type="number"
-            value={inputNumber}
-            maxLength={4}
-            onChange={(e) => setInputNumber(e.target.value)}
-          />
+          <div className={styles.numberDisplay}>
+            <div className={styles.num1}>{inputNumber[0]}</div>
+            <div className={styles.num2}>{inputNumber[1]}</div>
+            <div className={styles.num3}>{inputNumber[2]}</div>
+            <div className={styles.num4}>{inputNumber[3]}</div>
+          </div>
           {errorMessage && (
             <p className={styles.errorMessage}>{errorMessage}</p>
           )}
@@ -77,11 +108,8 @@ export default function AttendancePad() {
           >
             0
           </button>
-          <button
-            className={styles.previousButton}
-            onClick={handlePreviousClick}
-          >
-            ←
+          <button className={styles.resetButton} onClick={handleResetClick}>
+            초기화
           </button>
         </div>
         <button className={styles.confirmButton} onClick={handleConfirmClick}>
