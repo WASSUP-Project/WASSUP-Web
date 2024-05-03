@@ -51,8 +51,7 @@
     color: #666;
 }
 
-.absent,
-.late {
+.absent {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -62,21 +61,23 @@
     padding: 1rem;
 }
 
-.absentTitle,
-.lateTitle {
+.absentTitle {
     font-weight: bold;
     color: #333;
 }
 
-.absentList,
-.lateList {
+.absentList {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.absentList li,
-.lateList li {
+.absentList li {
     margin-bottom: 0.3rem;
     color: #666;
+}
+
+.modalButton {
+    color: #fff;
+    background-color: #9DC0FA;
 }
