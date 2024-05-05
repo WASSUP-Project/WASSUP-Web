@@ -99,7 +99,7 @@ export default function GroupDetail() {
       case "manage":
         return <MemberManage id={id} />;
       case "attendance":
-        return <Attendance />;
+        return <Attendance id={id} />;
       case "notice":
         return <GroupNotice />;
       case "edit":
