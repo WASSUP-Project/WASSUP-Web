@@ -101,7 +101,7 @@ export default function GroupDetail() {
       case "attendance":
         return <Attendance id={id} />;
       case "notice":
-        return <GroupNotice />;
+        return <GroupNotice id={id} groupData={groupData} />;
       case "edit":
         return <GroupManage id={id} groupData={groupData} />;
     }

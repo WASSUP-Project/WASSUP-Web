@@ -45,6 +45,7 @@
 .notice {
     margin-bottom: 1.2rem;
     border-radius: 0.5rem;
+    max-width: 40rem;
     background-color: #fff;
     padding: 1.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -78,4 +79,19 @@
     background-color: #9DC0FA;
     color: #ffffff;
     cursor: pointer;
+}
+
+.modal_content_title {
+    font-size: 1rem;
+    color: #666666;
+}
+
+.modal_content_textarea {
+    width: 100%;
+    height: 10rem;
+    border: 1px solid #cccccc;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-size: 1rem;
+    color: #666666;
 }
