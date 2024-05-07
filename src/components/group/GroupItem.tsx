@@ -38,7 +38,7 @@ export default function GroupItem(props: group) {
         />
       )}
       <div className={styles.group_info}>
-        <div className={styles.group_name}>{props.groupName}</div>
+        <div className={styles.group_name}>{props.name}</div>
         <div className={styles.group_address}>{props.address}</div>
         <div className={styles.group_member}>
           <div className={styles.group_member_count}>

@@ -1,6 +1,6 @@
 export type group = {
     id: number;
-    groupName: string;
+    name: string;
     address: string;
     totalMember: number;
     waitingMember: number;
