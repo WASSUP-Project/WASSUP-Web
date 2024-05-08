@@ -8,7 +8,7 @@ export type ResponseCode = {
 
 export const getAttendancePageUniqueCode = async (groupId : number) => {
     try {
-        const response = await axios.get(`/api/attendance/code/${groupId}`, {
+        const response = await axios.get(`/api/attendances/code/${groupId}`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")} `,
