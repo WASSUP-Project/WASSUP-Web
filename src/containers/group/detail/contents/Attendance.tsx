@@ -31,8 +31,7 @@ export default function Attendance(props: AttendanceProps) {
   const generateAttendanceCode = async () => {
     onOpen();
     setIsLoading(true);
-    // const code = await getAttendanceCode();
-    const code = "Ri8DW19O"; // 임시 코드 API 개발 중
+    const code = await getAttendanceCode();
     if (!code) {
       alert("출석 링크를 생성하는데 실패했습니다. 잠시 후 다시 시도해주세요.");
       return;
