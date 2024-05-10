@@ -104,3 +104,22 @@
     color: #fff;
     cursor: pointer;
 }
+
+.memberName {
+    padding: 0.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1.4rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ddd;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.memberName:hover {
+    cursor: pointer;
+    background-color: #f0f0f0;
+}

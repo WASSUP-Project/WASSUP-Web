@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./Attendance.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -16,6 +16,8 @@ import {
 } from "@nextui-org/react";
 import {
   ResponseCode,
+  ResponseMembers,
+  getAttendanceInfo,
   getAttendancePageUniqueCode,
 } from "@/services/attendance/attendance";
 
@@ -27,6 +29,30 @@ export default function Attendance(props: AttendanceProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [attendanceCode, setAttendanceCode] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [attendanceRate, setAttendanceRate] = useState<number>(0);
+  const [absentMembers, setAbsentMembers] = useState<ResponseMembers[]>([]);
+
+  useEffect(() => {
+    const fetchAttendanceInfo = async () => {
+      try {
+        const attendanceInfo = await getAttendanceInfo(props.id);
+        if (!attendanceInfo) {
+          alert(
+            "출석 정보를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요."
+          );
+          return;
+        }
+
+        setAttendanceRate(attendanceInfo.attendanceRate);
+        setAbsentMembers(attendanceInfo.notAttendanceMembers);
+      } catch (error) {
+        console.error("출석 정보를 불러오는데 실패: ", error);
+        alert("출석 정보를 불러오는 중에 오류가 발생했습니다.");
+      }
+    };
+
+    fetchAttendanceInfo();
+  }, [props.id]);
 
   const generateAttendanceCode = async () => {
     onOpen();
@@ -65,7 +91,7 @@ export default function Attendance(props: AttendanceProps) {
             label="금일 출석률"
             aria-label="Downloading..."
             size="md"
-            value={88}
+            value={attendanceRate}
             color="primary"
             showValueLabel={true}
             className={styles.attendanceRate}
@@ -73,9 +99,11 @@ export default function Attendance(props: AttendanceProps) {
           <div className={styles.absent}>
             <h3 className={styles.absentTitle}>금일 미출석 인원</h3>
             <ul className={styles.absentList}>
-              <li>김철수</li>
-              <li>홍길동</li>
-              <li>이영희</li>
+              {absentMembers.map((member) => (
+                <li key={member.memberId} className={styles.absentMembers}>
+                  {member.memberName}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
