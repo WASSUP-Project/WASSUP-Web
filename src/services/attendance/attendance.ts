@@ -61,3 +61,21 @@ export const requestAttendanceWithMemberId = async (memberId: number, code: stri
         console.error(error);
     }
 }
+
+export type AttendanceInfo = {
+    attendanceRate: number;
+    notAttendanceMembers: ResponseMembers[];
+};
+
+export const getAttendanceInfo = async (groupId: number) => {
+    try {
+        const response = await axios.get(`/api/attendances/info/${groupId}`, {
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        return response.data as AttendanceInfo;
+    } catch (error) {
+        console.error(error);
+    }
+};

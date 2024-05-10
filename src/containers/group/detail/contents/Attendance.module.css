@@ -72,8 +72,9 @@
     margin: 0;
 }
 
-.absentList li {
-    margin-bottom: 0.3rem;
+.absentMembers {
+    font-size: 1.1rem;
+    padding-top: 0.5rem;
     color: #666;
 }
 
