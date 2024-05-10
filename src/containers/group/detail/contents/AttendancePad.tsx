@@ -32,7 +32,7 @@ export default function AttendancePad() {
 
   useEffect(() => {
     setSelectedCode(searchParams.get("code") || "");
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
