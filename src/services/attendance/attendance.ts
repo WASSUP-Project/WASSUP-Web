@@ -20,3 +20,44 @@ export const getAttendancePageUniqueCode = async (groupId : number) => {
         console.error(error);
     }
 }
+
+export type RequestMembers = {
+    code: string;
+    phoneNumber: string;
+};
+
+export type ResponseMembers = {
+    memberId: number;
+    memberName: string;
+};
+
+export const getMembersByLastFourDigits = async (data: RequestMembers) => {
+    try {
+        const response = await axios.get(`/api/attendances/members?code=${data.code}&phoneNumber=${data.phoneNumber}`,
+        {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            timeout: 3000,
+        });
+        return response.data as ResponseMembers[];
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const requestAttendanceWithMemberId = async (memberId: number, code: string) => {
+    try {
+        const response = await axios.post(`/api/attendances/${memberId}`, {
+            code: code,
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            timeout: 3000,
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
