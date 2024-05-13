@@ -15,10 +15,11 @@ import {
   useDisclosure,
   Button,
   Pagination,
+  Link,
 } from "@nextui-org/react";
 import usePagination from "@/hooks/usePagination";
 import MemberInvite from "./MemberInvite";
-import { getGroupMembers } from "@/services/invite/invite";
+import { getGroupMembers } from "@/services/member/member";
 
 type ManageType = "info" | "invite";
 
@@ -82,11 +83,6 @@ export default function MemberManage(props: MemberManageProps) {
     console.log(`Send message to member ${id}`);
   };
 
-  const handleEditMember = (id: number) => {
-    // 회원 정보 수정 페이지로 이동하는 로직을 추가합니다.
-    console.log(`Edit member ${id}`);
-  };
-
   return (
     <>
       <div className={styles.title}>인원 관리</div>
@@ -146,14 +142,17 @@ export default function MemberManage(props: MemberManageProps) {
                         className={styles.button_image}
                         onClick={() => handleSendMessage(member.id)}
                       />
-                      <Image
-                        src="/edit.png"
-                        alt="edit"
-                        width={36}
-                        height={36}
-                        className={styles.button_image}
-                        onClick={() => handleEditMember(member.id)}
-                      />
+                      <Link
+                        href={`/group/member?id=${member.id}&group=${props.id}`}
+                      >
+                        <Image
+                          src="/edit.png"
+                          alt="edit"
+                          width={36}
+                          height={36}
+                          className={styles.button_image}
+                        />
+                      </Link>
                     </div>
                   </div>
                 ))}
