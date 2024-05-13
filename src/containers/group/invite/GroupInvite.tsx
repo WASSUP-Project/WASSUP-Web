@@ -12,7 +12,7 @@ const validationSchema = yup.object().shape({
     .string()
     .required("전화번호를 입력해주세요.")
     .matches(/^\d{10,11}$/, "유효한 전화번호를 입력해주세요."),
-  birth: yup.string().required("자녀 생일을 입력해주세요."),
+  birth: yup.date().required("자녀 생일을 입력해주세요."),
   specifics: yup.string().optional(),
   groupCode: yup.string().required("그룹 고유 코드를 입력해주세요."),
 });
