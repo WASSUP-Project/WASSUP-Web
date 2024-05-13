@@ -67,20 +67,6 @@ export const getWaitingMembers = async (id: number) => {
     }
 }
 
-export const getGroupMembers = async (id: number) => {
-    try {
-        const response = await axios.get(`/api/groups/members?id=${id}&type=accepted`, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error(error);
-    }
-};
-
 export type RequestJoinGroup = {
     name: string;
     phoneNumber: string;
