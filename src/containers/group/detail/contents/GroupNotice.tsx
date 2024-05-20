@@ -11,14 +11,14 @@ import {
   ModalFooter,
   useDisclosure,
   Button,
+  Spinner,
 } from "@nextui-org/react";
 import { groupInfo } from "@/types/group/group";
-
-type notice = {
-  id: number;
-  title: string;
-  content: string;
-};
+import {
+  ResponseNotice,
+  createNotice,
+  getNotices,
+} from "@/services/notice/notice";
 
 type GroupNoticeProps = {
   id: number;
@@ -26,14 +26,22 @@ type GroupNoticeProps = {
 };
 
 export default function GroupNotice(props: GroupNoticeProps) {
-  const [notices, setNotices] = useState<notice[]>([]);
+  const [notices, setNotices] = useState<ResponseNotice[]>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     async function fetchNotices() {
-      // 추후 API로 대체
+      const response = await getNotices(props.id);
+      if (response) {
+        setNotices(response);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+      }
+
       setTitle(
         `[${props.groupData?.name}] ${new Date()
           .toLocaleDateString("ko-KR", {
@@ -45,80 +53,28 @@ export default function GroupNotice(props: GroupNoticeProps) {
           .replace("월 ", "월 ")
           .replace("일", "일")} 소식입니다.`
       );
-
-      // 임시 데이터
-      setNotices([
-        {
-          id: 1,
-          title: "[테스트그룹] 2024년 5월 4일 소식입니다.",
-          content:
-            "안녕하세요. 테스트그룹입니다. 다름이 아니라 기말고사가 다가오고 있습니다. 이번 기말고사 대비 기간은 5월 22일부터 6월 7일까지입니다. 기간 동안에는 모든 학생들이 기말고사를 준비하도록 합니다. 감사합니다.",
-        },
-        {
-          id: 2,
-          title: "[테스트그룹] 2024년 5월 1일 소식입니다.",
-          content:
-            "안녕하세요. 테스트그룹입니다. 금일 5월 1일부터 일주일간 토익 특별 강의가 진행됩니다. 토익을 준비하시는 학생들은 꼭 참석하시기 바랍니다. 감사합니다.",
-        },
-        {
-          id: 3,
-          title: "[테스트그룹] 2024년 4월 14일 소식입니다.",
-          content:
-            "안녕하세요. 테스트그룹입니다. 이번 주 토요일에는 4월자 생일 파티가 있습니다. 많은 참석 부탁드립니다.",
-        },
-        {
-          id: 4,
-          title: "[테스트그룹] 2024년 4월 2일 소식입니다.",
-          content: "안녕하세요. 테스트그룹입니다.",
-        },
-        {
-          id: 5,
-          title: "[테스트그룹] 2024년 3월 22일 소식입니다.",
-          content: "안녕하세요. 테스트그룹입니다.",
-        },
-        {
-          id: 6,
-          title: "[테스트그룹] 2024년 3월 14일 소식입니다.",
-          content: "안녕하세요. 테스트그룹입니다.",
-        },
-        {
-          id: 7,
-          title: "[테스트그룹] 2024년 3월 7일 소식입니다.",
-          content: "안녕하세요. 테스트그룹입니다.",
-        },
-        {
-          id: 8,
-          title: "[테스트그룹] 2024년 2월 20일 소식입니다.",
-          content: "안녕하세요. 테스트그룹입니다.",
-        },
-        {
-          id: 9,
-          title: "[테스트그룹] 2024년 2월 13일 소식입니다.",
-          content: "안녕하세요. 테스트그룹입니다.",
-        },
-        {
-          id: 10,
-          title: "[테스트그룹] 2024년 2월 2일 소식입니다.",
-          content: "안녕하세요. 테스트그룹입니다.",
-        },
-      ]);
     }
-
     fetchNotices();
   }, []);
 
   function requestSendNotice() {
-    // 몌시지 전송 API 호출
+    const response = createNotice({
+      id: props.id,
+      title: title,
+      content: message,
+    });
+
     onOpenChange();
     alert("소식이 전송되었습니다.");
-    // 공지사항 업데이트
+
+    // 공지사항 작성 후 다시 불러오는 것이 아니라 전송된 공지사항을 추가하는 방식, API 호출을 줄이기 위함
     setNotices([
       {
-        id: 1,
+        id: 0,
         title: title,
         content: message,
       },
-      ...notices,
+      ...(notices || []),
     ]);
     setMessage("");
   }
@@ -134,15 +90,25 @@ export default function GroupNotice(props: GroupNoticeProps) {
           </Button>
         </div>
         <div className={styles.notice_container}>
-          {notices.length === 0 ? (
-            <div className={styles.empty_notice}>공지사항이 없습니다.</div>
+          {isLoading ? (
+            <div className={styles.loading}>
+              <Spinner size="lg" />
+            </div>
           ) : (
-            notices.map((notice) => (
-              <div key={notice.id} className={styles.notice}>
-                <div className={styles.notice_title}>{notice.title}</div>
-                <div className={styles.notice_content}>{notice.content}</div>
-              </div>
-            ))
+            <>
+              {notices === undefined || notices.length === 0 ? (
+                <div className={styles.empty_notice}>공지사항이 없습니다.</div>
+              ) : (
+                notices.map((notice) => (
+                  <div key={notice.id} className={styles.notice}>
+                    <div className={styles.notice_title}>{notice.title}</div>
+                    <div className={styles.notice_content}>
+                      {notice.content}
+                    </div>
+                  </div>
+                ))
+              )}
+            </>
           )}
         </div>
       </div>
