@@ -64,7 +64,7 @@ export const requestAttendanceWithMemberId = async (memberId: number, code: stri
 
 export type AttendanceInfo = {
     attendanceRate: number;
-    notAttendanceMembers: ResponseMembers[];
+    notAttendanceMembers: ResponseMembers[] | [];
 };
 
 export const getAttendanceInfo = async (groupId: number) => {
@@ -72,6 +72,7 @@ export const getAttendanceInfo = async (groupId: number) => {
         const response = await axios.get(`/api/attendances/info/${groupId}`, {
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
             }
         });
         return response.data as AttendanceInfo;
