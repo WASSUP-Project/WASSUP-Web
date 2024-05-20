@@ -42,6 +42,13 @@
     overflow-y: auto;
 }
 
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 .notice {
     margin-bottom: 1.2rem;
     border-radius: 0.5rem;
