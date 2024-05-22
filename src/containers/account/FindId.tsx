@@ -1,17 +1,28 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Spacer from "@/components/Spacer";
 import styles from "./FindId.module.css";
 import Link from "next/link";
-import { Image } from "@nextui-org/react";
-import { sendVerificationCode, verifyCode } from "@/services/signup/signup";
+import Image from "next/image";
+import { sendVerificationCode } from "@/services/signup/signup";
+import { findIdByCertification } from "@/services/account/account";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@nextui-org/modal";
+import { Button, useDisclosure } from "@nextui-org/react";
 
 export default function FindId() {
-  const [isSent, setIsSent] = React.useState<boolean>(false);
-  const [isVerified, setIsVerified] = React.useState<boolean>(false);
+  const [isSent, setIsSent] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [adminId, setAdminId] = useState<string>("");
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const validationSchema = yup.object().shape({
     phoneNumber: yup
@@ -58,21 +69,15 @@ export default function FindId() {
       return;
     }
 
-    const data = verifyCode({
+    const data = await findIdByCertification({
       phoneNumber: formik.values.phoneNumber,
       inputCertificationCode: formik.values.verificationCode,
     });
 
-    if (await data) {
+    if (data) {
       setIsVerified(true);
-      alert("인증되었습니다.");
-
-      const verificationCodeInput = document.getElementById("verificationCode");
-      if (verificationCodeInput) {
-        verificationCodeInput.setAttribute("disabled", "true");
-      }
-
-      formik.setFieldValue("verificationCode", formik.values.verificationCode);
+      setAdminId(data.adminId);
+      onOpen();
     } else {
       setIsVerified(false);
       alert("인증번호가 올바르지 않습니다.");
@@ -107,7 +112,7 @@ export default function FindId() {
                 />
                 {isSent ? (
                   <Image
-                    src="check.png"
+                    src="../check.png"
                     alt="check"
                     width={20}
                     height={20}
@@ -144,7 +149,7 @@ export default function FindId() {
                 {isSent ? (
                   isVerified ? (
                     <Image
-                      src="check.png"
+                      src="../check.png"
                       alt="check"
                       width={20}
                       height={20}
@@ -202,6 +207,34 @@ export default function FindId() {
 
         <Spacer height={5} />
       </div>
+
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                아이디 찾기
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  아이디는 <strong>{adminId}</strong> 입니다.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Link href={"/login"}>
+                  <Button
+                    color="primary"
+                    onPress={onClose}
+                    className={styles.submitButton}
+                  >
+                    로그인으로
+                  </Button>
+                </Link>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 }
