@@ -1,17 +1,36 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Spacer from "@/components/Spacer";
-import styles from "./FindId.module.css";
+import styles from "./FindPassword.module.css";
 import Link from "next/link";
-import { Image } from "@nextui-org/react";
+import Image from "next/image";
 import { sendVerificationCode, verifyCode } from "@/services/signup/signup";
+import {
+  resetPassword,
+  sendVerificationCodeForPassword,
+} from "@/services/account/account";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@nextui-org/modal";
+import { EyeFilledIcon } from "@/components/eyes/EyeFilledIcon";
+import { EyeSlashFilledIcon } from "@/components/eyes/EyeSlashFilledIcon";
+import { Button, useDisclosure } from "@nextui-org/react";
 
 export default function FindPassword() {
-  const [isSent, setIsSent] = React.useState<boolean>(false);
-  const [isVerified, setIsVerified] = React.useState<boolean>(false);
+  const [isSent, setIsSent] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [isPasswordVisible2, setIsPasswordVisible2] = useState<boolean>(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const validationSchema = yup.object().shape({
     id: yup
@@ -46,6 +65,16 @@ export default function FindPassword() {
       return;
     }
 
+    const response = sendVerificationCodeForPassword({
+      adminId: formik.values.id,
+      phoneNumber: formik.values.phoneNumber,
+    });
+
+    if (!response) {
+      alert("작성한 정보가 올바르지 않습니다.");
+      return;
+    }
+
     sendVerificationCode(formik.values.phoneNumber);
     setIsSent(true);
 
@@ -63,25 +92,56 @@ export default function FindPassword() {
       return;
     }
 
-    const data = verifyCode({
+    const data = await verifyCode({
       phoneNumber: formik.values.phoneNumber,
       inputCertificationCode: formik.values.verificationCode,
     });
 
-    if (await data) {
+    if (data) {
       setIsVerified(true);
-      alert("인증되었습니다.");
 
       const verificationCodeInput = document.getElementById("verificationCode");
       if (verificationCodeInput) {
         verificationCodeInput.setAttribute("disabled", "true");
       }
-
-      formik.setFieldValue("verificationCode", formik.values.verificationCode);
     } else {
       setIsVerified(false);
       alert("인증번호가 올바르지 않습니다.");
     }
+  };
+
+  const handlePasswordReset = () => {
+    if (isSent && isVerified) {
+      onOpen();
+    } else {
+      alert("휴대폰 번호 인증을 완료해주세요.");
+    }
+  };
+
+  const requestResetPassword = async () => {
+    if (newPassword !== confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      alert("비밀번호는 8자 이상 입력해주세요.");
+      return;
+    }
+
+    const response = resetPassword({
+      adminId: formik.values.id,
+      phoneNumber: formik.values.phoneNumber,
+      inputCertificationCode: formik.values.verificationCode,
+      newPassword: newPassword,
+    });
+
+    if (!response) {
+      alert("작성한 정보가 올바르지 않습니다.");
+      return;
+    }
+
+    alert("비밀번호가 재설정되었습니다.");
   };
 
   return (
@@ -127,7 +187,7 @@ export default function FindPassword() {
                 />
                 {isSent ? (
                   <Image
-                    src="check.png"
+                    src="../check.png"
                     alt="check"
                     width={20}
                     height={20}
@@ -164,7 +224,7 @@ export default function FindPassword() {
                 {isSent ? (
                   isVerified ? (
                     <Image
-                      src="check.png"
+                      src="../check.png"
                       alt="check"
                       width={20}
                       height={20}
@@ -211,7 +271,7 @@ export default function FindPassword() {
                 <button
                   type="submit"
                   className={styles.submitButton}
-                  //   onClick={}
+                  onClick={handlePasswordReset}
                 >
                   재설정
                 </button>
@@ -222,6 +282,92 @@ export default function FindPassword() {
 
         <Spacer height={5} />
       </div>
+
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                비밀번호 재설정
+              </ModalHeader>
+              <ModalBody>
+                <>
+                  {isVerified ? (
+                    <>
+                      <div className={styles.inputGroup}>
+                        <label htmlFor="newPassword">새 비밀번호</label>
+                        <div className={styles.inputWithButton}>
+                          <input
+                            type={isPasswordVisible ? "text" : "password"}
+                            id="newPassword"
+                            name="newPassword"
+                            placeholder="새 비밀번호를 입력해주세요."
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            className={styles.eyes_button}
+                            onClick={() =>
+                              setIsPasswordVisible(!isPasswordVisible)
+                            }
+                          >
+                            {isPasswordVisible ? (
+                              <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                            ) : (
+                              <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                      <div className={styles.inputGroup}>
+                        <label htmlFor="confirmPassword">비밀번호 확인</label>
+                        <div className={styles.inputWithButton}>
+                          <input
+                            type={isPasswordVisible2 ? "text" : "password"}
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            placeholder="비밀번호를 다시 입력해주세요."
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            className={styles.eyes_button}
+                            onClick={() =>
+                              setIsPasswordVisible2(!isPasswordVisible2)
+                            }
+                          >
+                            {isPasswordVisible2 ? (
+                              <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                            ) : (
+                              <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              </ModalBody>
+              <ModalFooter>
+                <Link href={"/login"}>
+                  <Button
+                    color="primary"
+                    onPress={onClose}
+                    onClick={requestResetPassword}
+                    className={styles.submitButton}
+                  >
+                    확인
+                  </Button>
+                </Link>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 }
