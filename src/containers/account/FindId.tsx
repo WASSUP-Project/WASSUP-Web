@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Spacer from "@/components/Spacer";
@@ -19,9 +19,9 @@ import {
 import { Button, useDisclosure } from "@nextui-org/react";
 
 export default function FindId() {
-  const [isSent, setIsSent] = React.useState<boolean>(false);
-  const [isVerified, setIsVerified] = React.useState<boolean>(false);
-  const [adminId, setAdminId] = React.useState<string>("");
+  const [isSent, setIsSent] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [adminId, setAdminId] = useState<string>("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const validationSchema = yup.object().shape({
@@ -227,7 +227,7 @@ export default function FindId() {
                     onPress={onClose}
                     className={styles.submitButton}
                   >
-                    로그인하러 가기
+                    로그인으로
                   </Button>
                 </Link>
               </ModalFooter>
