@@ -72,6 +72,16 @@
     cursor: pointer;
 }
 
+.input_group_ok {
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    top: 1.5rem;
+    right: 0;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+}
+
 .bottomGroup {
     display: flex;
     justify-content: space-between;
