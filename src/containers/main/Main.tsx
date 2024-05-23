@@ -141,7 +141,7 @@ export default function Main() {
 
           {renderMenu()}
 
-          <Footer />
+          {selectedMenu !== "Support" && <Footer />}
         </div>
       )}
     </>
