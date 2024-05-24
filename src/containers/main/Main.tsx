@@ -31,7 +31,12 @@ export default function Main() {
   const [selectedMenu, setSelectedMenu] = useState<menuType>("Home");
 
   useEffect(() => {
-    if (admin == null) {
+    if (localStorage.getItem("accessToken") == null) {
+      setIsLoading(false);
+      return;
+    }
+
+    if (admin != null) {
       setIsLoading(false);
       return;
     }
@@ -57,6 +62,7 @@ export default function Main() {
   function requestLogout() {
     logout();
     setAdmin(null);
+    window.location.href = "/";
   }
 
   function handleMenuClick(menu: menuType) {
