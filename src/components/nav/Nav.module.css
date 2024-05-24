@@ -70,8 +70,8 @@
     min-width: 8rem;
 
     border: none;
-    background-color: #e4d5fe;
-    color: #926dff;
+    background-color: #adcdff;
+    color: #ffffff;
 }
 
 .text_button p {
@@ -87,5 +87,5 @@
 }
 
 .button:hover {
-    background-color: #D9C3FF;
+    background-color: #2a7bff;
 }
