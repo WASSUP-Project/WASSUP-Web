@@ -1,71 +1,89 @@
 "use client";
 
 import React from "react";
-import Spacer from "@/components/Spacer";
-import PositiveButton from "@/components/buttons/PositiveButton";
 import styles from "./About.module.css";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function About() {
   return (
-    <>
-      <Spacer />
-      <div className={styles.mainContainer_white}>
-        <div className={styles.title}>
-          스마트 출결 파트너
-          <br />
-          WASSUP
-        </div>
-        <div className={styles.message}>실시간 등하원 안심 메시지</div>
-      </div>
-      <Spacer />
-      <div className={styles.mainContainer_gray}>
-        <div className={styles.content1}>
-          <div className={styles.content1_1}>
-            <h1 className={styles.content1Title}>스마트한 출결관리</h1>
-            <p className={styles.content1Description}>
-              얼굴 인식으로 편하게 출결을 관리하세요. <br />
-              안심 등하원 메시지로 자녀의 출결을 확인하세요
-            </p>
-            <Link href="/group">
-              <PositiveButton text="그룹 미리보기" />
-            </Link>
-          </div>
-          <div>
-            <Image
-              src="/image.png"
-              alt="Image of something relevant"
-              width={500}
-              height={250}
-              className={styles.content1_2}
-            />
-          </div>
-        </div>
-      </div>
-      <Spacer />
-      <div className={styles.mainContainer_white}>
-        <div className={styles.semiTitle}>쉽고 간편한 기능들</div>
-        <div>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Wassup 제품 소개</h1>
+
+      <section className={styles.feature}>
+        <h2 className={styles.featureTitle}>1. 그룹 기능</h2>
+        <ul className={styles.featureList}>
+          <li>그룹을 생성할 수 있습니다.</li>
+          <li>대표 이미지를 설정할 수 있습니다.</li>
+          <li>
+            가입을 희망하는 인원에게 초대 메시지를 보내면 가입 페이지를 통해
+            그룹에 가입 신청을 보낼 수 있습니다.
+          </li>
           <Image
-            src="/image1.png"
+            src="/group.png"
             alt="Image of something relevant"
-            width={1300}
-            height={650}
+            width={900}
+            height={450}
           ></Image>
-        </div>
-      </div>
-      <Spacer />
-      <div className={styles.mainContainer_gray}>
-        <div className={styles.banner}>
+        </ul>
+      </section>
+
+      <section className={styles.feature}>
+        <h2 className={styles.featureTitle}>2. 인원 관리</h2>
+        <ul className={styles.featureList}>
+          <li>
+            초대 메시지에는 가입 페이지 링크와 그룹 고유 코드가 포함됩니다.
+          </li>
+          <li>
+            가입 페이지에서 멤버의 정보와 고유 코드를 통해 가입 신청이
+            가능합니다.
+          </li>
+          <li>
+            관리자는 가입 신청한 멤버들을 볼 수 있으며, 수락 또는 거절할 수
+            있습니다.
+          </li>
+          <li>인원의 정보를 수정하거나 개인 메시지를 보낼 수 있습니다.</li>
           <Image
-            src="/image2.png"
+            src="/groupMember.png"
             alt="Image of something relevant"
-            width={1000}
-            height={200}
+            width={900}
+            height={450}
           ></Image>
-        </div>
-      </div>
-    </>
+        </ul>
+      </section>
+
+      <section className={styles.feature}>
+        <h2 className={styles.featureTitle}>3. 출결 관리</h2>
+        <ul className={styles.featureList}>
+          <li>
+            비밀번호 4자리를 통해 데스크에서 출석할 수 있도록 하는 화면 링크를
+            제공합니다.
+          </li>
+          <li>출석이 완료되면 등록된 전화번호로 알림 메시지가 전송됩니다.</li>
+          <li>출석률이나 미출석 인원을 관리 페이지에서 확인할 수 있습니다.</li>
+          <Image
+            src="/groupAttendance.png"
+            alt="Image of something relevant"
+            width={900}
+            height={450}
+          ></Image>
+        </ul>
+      </section>
+
+      <section className={styles.feature}>
+        <h2 className={styles.featureTitle}>4. 공지사항 작성</h2>
+        <ul className={styles.featureList}>
+          <li>
+            멤버들에게 일괄적으로 공지사항을 작성해서 문자로 발송할 수 있습니다.
+          </li>
+          <li>관리자는 보낸 이력을 확인할 수 있습니다.</li>
+          <Image
+            src="/groupNotice.png"
+            alt="Image of something relevant"
+            width={900}
+            height={450}
+          ></Image>
+        </ul>
+      </section>
+    </div>
   );
 }

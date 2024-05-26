@@ -10,10 +10,10 @@
     cursor: pointer;
 
     border: none;
-    background-color: #e4d5fe;
-    color: #926dff;
+    background-color: #adcdff;
+    color: #ffffff;
 }
 
 .positiveButton:hover {
-    background-color: #D9C3FF;
+    background-color: #2a7bff;
 }

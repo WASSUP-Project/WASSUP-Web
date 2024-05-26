@@ -16,7 +16,7 @@ export default function Inquiry() {
       <p className={styles.subTitle}>✅ 업종별 사용 사례 살펴보기</p>
       <Spacer height={3} />
       <div>
-        <Snippet color="secondary" size="lg" symbol="">
+        <Snippet color="primary" size="lg" symbol="">
           skhu.wassup@gmail.com
         </Snippet>
         <Spacer height={3} />
