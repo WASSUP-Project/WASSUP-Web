@@ -1,11 +1,10 @@
-.mainContainer_white {
+.main-container--white {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0px;
     gap: 24px;
     margin: 0 auto;
-
     background: #ffffff;
 }
 
@@ -16,33 +15,29 @@
     transform: translate(-50%, -50%);
 }
 
-.mainContainer_gray {
+.main-container--gray {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0px;
     gap: 24px;
     margin: 0 auto;
-
     background: #ededed;
 }
 
-.mainContainer_skyblue {
+.main-container--skyblue {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 0px;
     gap: 24px;
     margin: 0 auto;
-
     background: #eff5ff;
 }
 
 .title {
-    width: 503px;
+    width: 533px;
     height: 149px;
-
-    font-family: 'Inter';
     font-style: normal;
     font-weight: 600;
     font-size: 64px;
@@ -51,25 +46,20 @@
     color: #35414B;
 }
 
-.semiTitle {
-    width: 503px;
+.semi-title {
+    width: 543px;
     height: 48px;
-
-    font-family: 'Inter';
     font-style: normal;
     font-weight: 600;
     font-size: 40px;
     line-height: 48px;
     text-align: center;
     color: #35414B;
-
 }
 
 .message {
-    width: 176px;
+    width: 196px;
     height: 24px;
-
-    font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -78,19 +68,19 @@
     color: #4E5A65;
 }
 
-.content1 {
+.content {
     display: flex;
     align-items: center;
 }
 
-.content1_1 {
+.content__text {
     padding: 8rem 0rem 8rem 4rem;
     display: flex;
     flex-direction: column;
     gap: 35px;
 }
 
-.content1_2 {
+.content__image {
     min-width: 500px;
     padding-right: 4rem;
     display: flex;
@@ -98,10 +88,9 @@
     gap: 35px;
 }
 
-.content1Title {
-    width: 315px;
+.content__title {
+    width: 345px;
     height: 48px;
-    font-family: 'Inter';
     font-style: normal;
     font-weight: 600;
     font-size: 40px;
@@ -109,10 +98,9 @@
     color: #35414B;
 }
 
-.content1Description {
+.content__description {
     width: 413px;
     height: 48px;
-    font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;

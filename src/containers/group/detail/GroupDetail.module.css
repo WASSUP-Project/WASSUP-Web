@@ -26,6 +26,7 @@
 }
 
 .list_item {
+    font-weight: 600;
     font-size: 1.4rem;
     padding: 2rem;
 }

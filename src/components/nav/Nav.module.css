@@ -2,7 +2,6 @@
     width: 111px;
     height: 24px;
 
-    font-family: 'Istok Web';
     font-style: normal;
     font-weight: 700;
     font-size: 28px;
@@ -16,7 +15,6 @@
 }
 
 .nav_item_text {
-    font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
