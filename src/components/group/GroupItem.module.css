@@ -30,7 +30,6 @@
 }
 
 .group_name {
-    font-family: "Inter", sans-serif;
     font-weight: 600;
     font-size: 22px;
     line-height: 136%;
@@ -54,7 +53,6 @@
 
 .group_member_count,
 .wait_member_count {
-    font-family: "Inter", sans-serif;
     font-weight: 600;
     font-size: 15px;
     line-height: 136%;

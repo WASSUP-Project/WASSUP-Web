@@ -1,36 +1,27 @@
-.container {
+.bill-policy {
     padding-top: 2rem;
 }
 
-.loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.content {
+.bill-policy__content {
     height: calc(100vh - 263px - 84px);
 }
 
-.content_white {
+.bill-policy__header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0px;
     gap: 24px;
     margin: 0 auto;
-
     background: #ffffff;
 }
 
-.title {
+.bill-policy__title {
     font-size: 35px;
     font-weight: 700;
     color: #000000;
 }
 
-.bill_container {
+.bill-policy__container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -39,7 +30,7 @@
     margin: 0 auto;
 }
 
-.bill_info{
+.bill-policy__info {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -48,22 +39,26 @@
     margin: 0 auto;
 }
 
-.card_header {
+.bill-policy__card {
+    max-width: 400px;
+}
+
+.bill-policy__card-header {
     height: 5rem;
 }
 
-.card_body {
+.bill-policy__card-body {
     height: 13rem;
 }
 
-.card {
+.bill-policy__card-content {
     padding: 1rem;
 }
 
-.pro_card {
+.bill-policy__card--pro {
     background-color: #eff5ff;
 }
 
-.pro_title {
+.bill-policy__pro-title {
     color: #70a7ff;
 }
