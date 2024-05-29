@@ -16,7 +16,9 @@ import { useSearchParams } from "next/navigation";
 import {
   ResponseMembers,
   getMembersByLastFourDigits,
+  getMembersByLastFourDigitsForLeaving,
   requestAttendanceWithMemberId,
+  requestLeavingWithMemberId,
 } from "@/services/attendance/attendance";
 
 type AttendanceType = "ok" | "already" | "notfound";
@@ -29,6 +31,7 @@ export default function AttendancePad() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [attendanceType, setAttendanceType] = useState<AttendanceType>("ok");
   const [members, setMembers] = useState([] as ResponseMembers[]);
+  const [isAttendance, setIsAttendance] = useState(true);
 
   useEffect(() => {
     setSelectedCode(searchParams.get("code") || "");
@@ -43,8 +46,6 @@ export default function AttendancePad() {
         }
       } else if (key === "Backspace") {
         setInputNumber((prev) => prev.slice(0, -1));
-      } else if (key === "Enter" && !isOpen) {
-        handleConfirmClick();
       } else if (key === "Enter" && isOpen) {
         onOpenChange();
       }
@@ -72,13 +73,14 @@ export default function AttendancePad() {
       setErrorMessage("4자리 숫자를 입력하세요.");
       return;
     }
+    setIsAttendance(true);
     setErrorMessage("");
     setInputNumber("");
-    await requestAttendanceMembers();
+    await requestMembers();
     onOpen();
   };
 
-  const requestAttendanceMembers = async () => {
+  const requestMembers = async () => {
     try {
       const response = await getMembersByLastFourDigits({
         code: selectedCode,
@@ -97,7 +99,7 @@ export default function AttendancePad() {
     }
   };
 
-  const requestAttendance = async (memberId: number) => {
+  const requestAttendanceClick = async (memberId: number) => {
     try {
       if (memberId === 0) {
         console.error("memberId is 0");
@@ -106,7 +108,53 @@ export default function AttendancePad() {
       await requestAttendanceWithMemberId(memberId, selectedCode);
 
       setMembers([]);
-      alert("출석이 완료되었습니다.");
+      alert("등원이 완료되었습니다.");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleLeavingClick = async () => {
+    if (inputNumber.length !== 4) {
+      setErrorMessage("4자리 숫자를 입력하세요.");
+      return;
+    }
+    setIsAttendance(false);
+    setErrorMessage("");
+    setInputNumber("");
+    await requestMembersForLeaving();
+    onOpen();
+  };
+
+  const requestMembersForLeaving = async () => {
+    try {
+      const response = await getMembersByLastFourDigitsForLeaving({
+        code: selectedCode,
+        phoneNumber: inputNumber,
+      });
+
+      if (!response || response.length === 0) {
+        setAttendanceType("notfound");
+        return;
+      }
+
+      setMembers(response);
+      setAttendanceType("ok");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const requestLeavingClick = async (memberId: number) => {
+    try {
+      if (memberId === 0) {
+        console.error("memberId is 0");
+        return;
+      }
+      await requestLeavingWithMemberId(memberId, selectedCode);
+
+      setMembers([]);
+      alert("하원이 완료되었습니다.");
     } catch (error) {
       console.error(error);
     }
@@ -150,9 +198,26 @@ export default function AttendancePad() {
             초기화
           </button>
         </div>
-        <button className={styles.confirmButton} onClick={handleConfirmClick}>
-          출석 확인
-        </button>
+        <div className={styles.buttons}>
+          <button
+            className={styles.attendanceButton}
+            onClick={() => {
+              setIsAttendance(true);
+              handleConfirmClick();
+            }}
+          >
+            등원
+          </button>
+          <button
+            className={styles.leavingButton}
+            onClick={() => {
+              setIsAttendance(false);
+              handleLeavingClick();
+            }}
+          >
+            하원
+          </button>
+        </div>
       </div>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -162,7 +227,9 @@ export default function AttendancePad() {
               <OkModal
                 onClose={onClose}
                 members={members}
-                requestAttendance={requestAttendance}
+                requestAction={
+                  isAttendance ? requestAttendanceClick : requestLeavingClick
+                }
               />
             ) : attendanceType === "already" ? (
               <AlreadyModal onClose={onClose} />
@@ -181,21 +248,21 @@ export default function AttendancePad() {
 interface OkModalProps {
   onClose: () => void;
   members: ResponseMembers[];
-  requestAttendance: (id: number) => void;
+  requestAction: (id: number) => void;
 }
 
-function OkModal({ onClose, members, requestAttendance }: OkModalProps) {
+function OkModal({ onClose, members, requestAction }: OkModalProps) {
   return (
     <>
       <ModalHeader className="flex flex-col gap-0">선택하기</ModalHeader>
       <ModalBody className={styles.modal__body}>
-        <div>출석할 인원을 선택해주세요.</div>
+        <div>인원을 선택해주세요.</div>
         {members.map((member) => (
           <div
             key={member.memberId}
             className={styles.memberName}
             onClick={() => {
-              requestAttendance(member.memberId);
+              requestAction(member.memberId);
               onClose();
             }}
           >
@@ -215,7 +282,7 @@ function AlreadyModal({ onClose }: { onClose: () => void }) {
     <>
       <ModalHeader className="flex flex-col gap-0">출석</ModalHeader>
       <ModalBody className={styles.modal__body}>
-        <div>이미 출석하셨습니다.</div>
+        <div>이미 처리되었습니다.</div>
       </ModalBody>
       <ModalFooter>
         <Button color="primary" onPress={onClose}>

@@ -62,6 +62,37 @@ export const requestAttendanceWithMemberId = async (memberId: number, code: stri
     }
 }
 
+export const getMembersByLastFourDigitsForLeaving = async (data: RequestMembers) => {
+    try {
+        const response = await axios.get(`/api/attendances/leaving/members?code=${data.code}&phoneNumber=${data.phoneNumber}`,
+        {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            timeout: 3000,
+        });
+        return response.data as ResponseMembers[];
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const requestLeavingWithMemberId = async (memberId: number, code: string) => {
+    try {
+        const response = await axios.post(`/api/attendances/leaving/${memberId}`, {
+            code: code,
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            timeout: 3000,
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 export type AttendanceInfo = {
     attendanceRate: number;
     notAttendanceMembers: ResponseMembers[] | [];
