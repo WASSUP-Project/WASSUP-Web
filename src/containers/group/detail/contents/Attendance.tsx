@@ -20,12 +20,16 @@ import {
   getAttendanceInfo,
   getAttendancePageUniqueCode,
 } from "@/services/attendance/attendance";
+import AttendanceManage from "./AttendanceManage";
+
+type PageType = "info" | "manage";
 
 type AttendanceProps = {
   id: number;
 };
 
 export default function Attendance(props: AttendanceProps) {
+  const [selectedPage, setSelectedPage] = useState<PageType>("info");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [attendanceCode, setAttendanceCode] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -80,33 +84,64 @@ export default function Attendance(props: AttendanceProps) {
   return (
     <>
       <h1 className={styles.title}>출결 관리</h1>
+      <div className={styles.switch}>
+        <Button
+          className={
+            selectedPage === "info"
+              ? styles.switch_button_active
+              : styles.switch_button
+          }
+          onPress={() => setSelectedPage("info")}
+        >
+          출결 현황
+        </Button>
+        <Button
+          className={
+            selectedPage === "manage"
+              ? styles.switch_button_active
+              : styles.switch_button
+          }
+          onPress={() => setSelectedPage("manage")}
+        >
+          출결 관리
+        </Button>
+      </div>
       <div className={styles.container}>
-        <div className={styles.buttonContainer}>
-          <Button className={styles.button} onClick={generateAttendanceCode}>
-            출석 링크
-          </Button>
-        </div>
-        <div className={styles.summary}>
-          <Progress
-            label="금일 출석률"
-            aria-label="Downloading..."
-            size="md"
-            value={attendanceRate}
-            color="primary"
-            showValueLabel={true}
-            className={styles.attendanceRate}
-          />
-          <div className={styles.absent}>
-            <h3 className={styles.absentTitle}>금일 미출석 인원</h3>
-            <ul className={styles.absentList}>
-              {absentMembers.map((member) => (
-                <li key={member.memberId} className={styles.absentMembers}>
-                  {member.memberName}
-                </li>
-              ))}
-            </ul>
+        {selectedPage === "info" ? (
+          <div className={styles.content}>
+            <div className={styles.buttonContainer}>
+              <Button
+                className={styles.button}
+                onClick={generateAttendanceCode}
+              >
+                출석 링크
+              </Button>
+            </div>
+            <div className={styles.summary}>
+              <Progress
+                label="금일 출석률"
+                aria-label="Downloading..."
+                size="md"
+                value={attendanceRate}
+                color="primary"
+                showValueLabel={true}
+                className={styles.attendanceRate}
+              />
+              <div className={styles.absent}>
+                <h3 className={styles.absentTitle}>금일 미출석 인원</h3>
+                <ul className={styles.absentList}>
+                  {absentMembers.map((member) => (
+                    <li key={member.memberId} className={styles.absentMembers}>
+                      {member.memberName}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <AttendanceManage id={props.id} />
+        )}
       </div>
 
       <Modal
