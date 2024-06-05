@@ -111,3 +111,65 @@ export const getAttendanceInfo = async (groupId: number) => {
         console.error(error);
     }
 };
+
+export type MemberWithAttendanceStatus = {
+    memberId: number;
+    memberName: string;
+    status: string;
+}
+
+export const getMembersWithAttendanceStatus = async (groupId: number) => {
+    try {
+        const response = await axios.get(`/api/attendances/members/${groupId}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+            }
+        });
+        return response.data as MemberWithAttendanceStatus[];
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export enum AttendanceStatus {
+    ATTENDANCE = "ATTENDANCE",
+    ABSENCE = "ABSENCE",
+    ILLNESS = "ILLNESS",
+    LEAVING = "LEAVING",
+}
+
+export namespace AttendanceStatus {
+    export function of(status: string): AttendanceStatus {
+        switch (status) {
+            case "ATTENDANCE":
+                return AttendanceStatus.ATTENDANCE;
+            case "ABSENCE":
+                return AttendanceStatus.ABSENCE;
+            case "ILLNESS":
+                return AttendanceStatus.ILLNESS;
+            case "LEAVING":
+                return AttendanceStatus.LEAVING;
+            default:
+                throw new Error(`Unknown status: ${status}`);
+        }
+    }
+}
+
+export type RequestUpdateAttendanceStatus = {
+    memberId: number;
+    status: string;
+};
+
+export const updateAttendanceStatus = async (data: RequestUpdateAttendanceStatus) => {
+    try {
+        await axios.put(`/api/attendances/members/${data.memberId}?status=${data.status}`, {}, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+            }
+        });
+    } catch (error) {
+        console.error(error);
+    }
+};

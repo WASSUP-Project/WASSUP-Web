@@ -56,7 +56,7 @@ export default function Attendance(props: AttendanceProps) {
     };
 
     fetchAttendanceInfo();
-  }, [props.id]);
+  }, [props.id, selectedPage]);
 
   const generateAttendanceCode = async () => {
     onOpen();

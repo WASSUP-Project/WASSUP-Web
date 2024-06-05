@@ -5,9 +5,3 @@ export type member = {
     birth: string;
     specifics: string;
 };
-
-export type memberForAttendance = {
-    id: number;
-    name: string;
-    status: number;
-};
