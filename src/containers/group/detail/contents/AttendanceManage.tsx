@@ -4,103 +4,41 @@ import { useState, useEffect, useMemo } from "react";
 import styles from "./AttendanceManage.module.css";
 import { Pagination, Link, Button } from "@nextui-org/react";
 import usePagination from "@/hooks/usePagination";
-import { getGroupMembers } from "@/services/member/member";
-import { member, memberForAttendance } from "@/types/user/member";
+import {
+  AttendanceStatus,
+  MemberWithAttendanceStatus,
+  getMembersWithAttendanceStatus,
+  updateAttendanceStatus,
+} from "@/services/attendance/attendance";
 
 type AttendanceManageProps = {
   id: number;
 };
 
 export default function AttendanceManage(props: AttendanceManageProps) {
-  const [members, setMembers] = useState<memberForAttendance[]>([]);
-  const [currentMembers, setCurrentMembers] = useState<memberForAttendance[]>(
-    []
-  );
+  const [members, setMembers] = useState<MemberWithAttendanceStatus[]>([]);
+  const [currentMembers, setCurrentMembers] = useState<
+    MemberWithAttendanceStatus[]
+  >([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const { currentPage, totalPages, setTotalItems, setPage } = usePagination(1);
 
   const filteredMembers = useMemo(() => {
     if (searchKeyword) {
       return members.filter((member) =>
-        member.name.toLowerCase().includes(searchKeyword.toLowerCase())
+        member.memberName.toLowerCase().includes(searchKeyword.toLowerCase())
       );
     } else {
       return members;
     }
   }, [members, searchKeyword]);
 
-  // API 구현 예정
-  //   useEffect(() => {
-  //     const data = getGroupMembers(props.id);
-  //     data.then((data) => {
-  //       setMembers(data);
-  //     });
-  //   }, [props.id]);
-
   useEffect(() => {
-    setMembers([
-      {
-        id: 1,
-        name: "김철수",
-        status: 0,
-      },
-      {
-        id: 2,
-        name: "이영희",
-        status: 1,
-      },
-      {
-        id: 3,
-        name: "박민수",
-        status: 1,
-      },
-      {
-        id: 4,
-        name: "최영수",
-        status: 0,
-      },
-      {
-        id: 5,
-        name: "김민지",
-        status: 0,
-      },
-      {
-        id: 6,
-        name: "박민지",
-        status: 3,
-      },
-      {
-        id: 7,
-        name: "이민지",
-        status: 3,
-      },
-      {
-        id: 8,
-        name: "최민지",
-        status: 3,
-      },
-      {
-        id: 9,
-        name: "김민수",
-        status: 0,
-      },
-      {
-        id: 10,
-        name: "박민수",
-        status: 1,
-      },
-      {
-        id: 11,
-        name: "이민수",
-        status: 1,
-      },
-      {
-        id: 12,
-        name: "최민수",
-        status: 0,
-      },
-    ]);
-  }, []);
+    const data = getMembersWithAttendanceStatus(props.id);
+    data.then((data) => {
+      setMembers(data as MemberWithAttendanceStatus[]);
+    });
+  }, [props.id]);
 
   useEffect(() => {
     const start = (currentPage - 1) * 7;
@@ -113,43 +51,101 @@ export default function AttendanceManage(props: AttendanceManageProps) {
     setSearchKeyword(e.target.value);
   };
 
-  const createButtonsByMemberStatus = (status: number) => {
+  const requestUpdateAttendanceStatus = (memberId: number, status: string) => {
+    const data = updateAttendanceStatus({
+      memberId: memberId,
+      status: status,
+    });
+    data.then(() => {
+      const updatedMembers = members.map((member) => {
+        if (member.memberId === memberId) {
+          return {
+            ...member,
+            status: status,
+          };
+        }
+        return member;
+      });
+      setMembers(updatedMembers);
+    });
+  };
+
+  const createButtonsByMemberStatus = (
+    member: MemberWithAttendanceStatus,
+    status: AttendanceStatus
+  ) => {
     switch (status) {
-      case 0:
+      case AttendanceStatus.ATTENDANCE:
         return (
           <>
             <Button size="md" className={styles.button_attendance} disabled>
               등원
             </Button>
-            <Button size="md" className={styles.button_normal}>
+            <Button
+              size="md"
+              className={styles.button_normal}
+              onClick={() =>
+                requestUpdateAttendanceStatus(member.memberId, "ABSENCE")
+              }
+            >
               결석
             </Button>
-            <Button size="md" className={styles.button_normal}>
+            <Button
+              size="md"
+              className={styles.button_normal}
+              onClick={() =>
+                requestUpdateAttendanceStatus(member.memberId, "LEAVING")
+              }
+            >
               하원
             </Button>
           </>
         );
-      case 1:
+      case AttendanceStatus.ABSENCE:
         return (
           <>
-            <Button size="md" className={styles.button_normal}>
+            <Button
+              size="md"
+              className={styles.button_normal}
+              onClick={() =>
+                requestUpdateAttendanceStatus(member.memberId, "ATTENDANCE")
+              }
+            >
               등원
             </Button>
             <Button size="md" className={styles.button_absence} disabled>
               결석
             </Button>
-            <Button size="md" className={styles.button_normal}>
+            <Button
+              size="md"
+              className={styles.button_normal}
+              onClick={() =>
+                requestUpdateAttendanceStatus(member.memberId, "LEAVING")
+              }
+            >
               하원
             </Button>
           </>
         );
-      case 3:
+      case AttendanceStatus.LEAVING:
         return (
           <>
-            <Button size="md" className={styles.button_normal}>
+            <Button
+              size="md"
+              className={styles.button_normal}
+              onClick={() =>
+                requestUpdateAttendanceStatus(member.memberId, "ATTENDANCE")
+              }
+            >
               등원
             </Button>
-            <Button size="md" className={styles.button_normal}>
+            <Button
+              size="md"
+              className={styles.button_normal}
+              onClick={() =>
+                requestUpdateAttendanceStatus(member.memberId, "ABSENCE")
+              }
+            >
               결석
             </Button>
             <Button size="md" className={styles.button_leave} disabled>
@@ -198,10 +194,13 @@ export default function AttendanceManage(props: AttendanceManageProps) {
           <div className={styles.list}>
             {filteredMembers.length === 0 && <div>인원이 없습니다.</div>}
             {currentMembers.map((member) => (
-              <div key={member.id} className={styles.list_item}>
-                <div className={styles.list_item_name}>{member.name}</div>
+              <div key={member.memberId} className={styles.list_item}>
+                <div className={styles.list_item_name}>{member.memberName}</div>
                 <div className={styles.buttons}>
-                  {createButtonsByMemberStatus(member.status)}
+                  {createButtonsByMemberStatus(
+                    member,
+                    AttendanceStatus.of(member.status)
+                  )}
                 </div>
               </div>
             ))}
