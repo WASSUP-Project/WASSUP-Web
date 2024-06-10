@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ResponseAdmin, getAdminName } from "@/services/admin/admin";
+import { ResponseAdmin, getAdmin } from "@/services/admin/admin";
 import styles from "./Profile.module.css";
 import { Link, Spinner } from "@nextui-org/react";
-import Image from "next/image";
 
 export default function Profile() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -14,10 +13,8 @@ export default function Profile() {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
-      setIsLoading(true);
       setAccessToken(token);
-
-      const response = getAdminName();
+      const response = getAdmin();
       response
         .then((data) => {
           setAdmin(data || null);
@@ -30,10 +27,10 @@ export default function Profile() {
     } else {
       setIsLoading(false);
     }
-  }, [accessToken]);
+  }, []);
 
   return (
-    <>
+    <div className={styles.container}>
       {isLoading && (
         <div className={styles.loading}>
           <Spinner size="lg" />
@@ -41,36 +38,43 @@ export default function Profile() {
       )}
 
       {!isLoading && (
-        <div style={{ overflow: "scroll" }}>
-          <div>
+        <>
+          <div className={styles.profileContent}>
             {accessToken ? (
-              <div>
-                {admin ? (
-                  <div className={styles.container}>
-                    <Image
-                      src="/profile.png"
-                      alt="profile"
-                      width={700}
-                      height={650}
-                    />
-                    <Link href="/" className={styles.link}>
-                      홈으로 돌아갈래요.
-                    </Link>
+              admin ? (
+                <div className={styles.profile}>
+                  <div className={styles.info}>
+                    <h2 className={styles.name}>{admin.name} 님</h2>
+                    <p className={styles.infoItem}>
+                      <strong>연락처:</strong> {admin.phoneNumber}
+                    </p>
+                    <p className={styles.infoItem}>
+                      <strong>관리 그룹수:</strong> {admin.groupCount}
+                    </p>
+                    <p className={styles.infoItem}>
+                      <strong>관리 인원수:</strong> {admin.memberCount}
+                    </p>
+                    <p className={styles.infoItem}>
+                      <strong>가입일:</strong> {admin.createdAt}
+                    </p>
                   </div>
-                ) : (
-                  <div>
-                    <h1>관리자 정보를 불러오는 중입니다.</h1>
-                  </div>
-                )}
-              </div>
+                </div>
+              ) : (
+                <div className={styles.message}>
+                  <h1>관리자 정보를 불러오는 중입니다.</h1>
+                </div>
+              )
             ) : (
-              <div>
+              <div className={styles.message}>
                 <h1>로그인이 필요합니다.</h1>
               </div>
             )}
           </div>
-        </div>
+          <Link href="/" className={styles.link}>
+            홈으로 돌아갈래요.
+          </Link>
+        </>
       )}
-    </>
+    </div>
   );
 }
