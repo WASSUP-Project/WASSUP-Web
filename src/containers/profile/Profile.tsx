@@ -46,7 +46,7 @@ export default function Profile() {
                   <div className={styles.info}>
                     <h2 className={styles.name}>{admin.name} 님</h2>
                     <p className={styles.infoItem}>
-                      <strong>연락처:</strong> {admin.phone}
+                      <strong>연락처:</strong> {admin.phoneNumber}
                     </p>
                     <p className={styles.infoItem}>
                       <strong>관리 그룹수:</strong> {admin.groupCount}

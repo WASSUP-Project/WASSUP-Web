@@ -37,7 +37,7 @@ export default function Main() {
             ? ({
                 id: data.id,
                 name: data.name,
-                phone: data.phone,
+                phoneNumber: data.phoneNumber,
               } as ResponseAdmin)
             : null
         );

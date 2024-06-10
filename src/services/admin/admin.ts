@@ -5,7 +5,7 @@ axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export type ResponseAdmin = {
     id: number;
     name: string;
-    phone: string;
+    phoneNumber: string;
     createdAt: string;
     updatedAt: string;
     groupCount: number;
