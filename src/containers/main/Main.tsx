@@ -15,7 +15,7 @@ import BillPolicy from "@/containers/policy/bill/BillPolicy";
 import Support from "@/containers/support/Support";
 import About from "@/containers/about/About";
 import Home from "./contents/Home";
-import { getAdminName } from "@/services/admin/admin";
+import { ResponseAdmin, getAdmin } from "@/services/admin/admin";
 import { logout } from "@/services/login/login";
 import { adminState } from "@/states/admin";
 import styles from "./Main.module.css";
@@ -31,10 +31,14 @@ export default function Main() {
   useEffect(() => {
     const fetchAdminName = async () => {
       try {
-        const data = await getAdminName();
+        const data = await getAdmin();
         setAdmin(
           data
-            ? { id: data.id, name: data.name, phoneNumber: data.phoneNumber }
+            ? ({
+                id: data.id,
+                name: data.name,
+                phone: data.phone,
+              } as ResponseAdmin)
             : null
         );
       } catch (error) {
