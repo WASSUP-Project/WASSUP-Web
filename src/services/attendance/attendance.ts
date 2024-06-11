@@ -173,3 +173,16 @@ export const updateAttendanceStatus = async (data: RequestUpdateAttendanceStatus
         console.error(error);
     }
 };
+
+export const updateAttendanceStatusAll = async (groupId: number, status: number) => {
+    try {
+        await axios.put(`/api/attendances/members/all?id=${groupId}&statusId=${status}`, {}, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+            }
+        });
+    } catch (error) {
+        console.error(error);
+    }
+};

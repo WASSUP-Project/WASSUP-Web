@@ -9,6 +9,7 @@ import {
   MemberWithAttendanceStatus,
   getMembersWithAttendanceStatus,
   updateAttendanceStatus,
+  updateAttendanceStatusAll,
 } from "@/services/attendance/attendance";
 
 type AttendanceManageProps = {
@@ -65,6 +66,19 @@ export default function AttendanceManage(props: AttendanceManageProps) {
           };
         }
         return member;
+      });
+      setMembers(updatedMembers);
+    });
+  };
+
+  const requestUpdateAttendanceStatusAll = (status: number) => {
+    const data = updateAttendanceStatusAll(props.id, status);
+    data.then(() => {
+      const updatedMembers = members.map((member) => {
+        return {
+          ...member,
+          status: status === 0 ? "ATTENDANCE" : "LEAVING",
+        };
       });
       setMembers(updatedMembers);
     });
@@ -183,10 +197,18 @@ export default function AttendanceManage(props: AttendanceManageProps) {
               className={styles.searchInput}
             />
             <div className={styles.controll_buttons}>
-              <Button size="md" className={styles.button_attendance}>
+              <Button
+                size="md"
+                className={styles.button_attendance}
+                onClick={() => requestUpdateAttendanceStatusAll(0)}
+              >
                 전체 출석
               </Button>
-              <Button size="md" className={styles.button_leave}>
+              <Button
+                size="md"
+                className={styles.button_leave}
+                onClick={() => requestUpdateAttendanceStatusAll(3)}
+              >
                 전체 하원
               </Button>
             </div>
