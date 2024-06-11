@@ -44,3 +44,27 @@ export const createNotice = async (request: RequestCreateNotice) => {
         console.error(error);
     }
 };
+
+export type RequestCreateNoticeToMember = {
+    memberId: number;
+    groupId: number;
+    title: string;
+    content: string;
+};
+
+export const createNoticeToMember = async (request: RequestCreateNoticeToMember) => {
+    try {
+        const response = await axios.post(`/api/announcements/${request.memberId}?groupId=${request.groupId}`, {
+            title: request.title,
+            content: request.content,
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+};

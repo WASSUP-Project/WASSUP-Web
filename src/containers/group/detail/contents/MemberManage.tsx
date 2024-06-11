@@ -20,11 +20,14 @@ import {
 import usePagination from "@/hooks/usePagination";
 import MemberInvite from "./MemberInvite";
 import { getGroupMembers } from "@/services/member/member";
+import { groupInfo } from "@/types/group/group";
+import { createNoticeToMember } from "@/services/notice/notice";
 
 type ManageType = "info" | "invite";
 
 type MemberManageProps = {
   id: number;
+  groupData: groupInfo | null;
 };
 
 export default function MemberManage(props: MemberManageProps) {
@@ -32,6 +35,7 @@ export default function MemberManage(props: MemberManageProps) {
   const [currentMembers, setCurrentMembers] = useState<member[]>([]);
   const [selectedMember, setSelectedMember] = useState<member | null>(null);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [message, setMessage] = useState("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedModal, setSelectedModal] = useState<string>("");
   const [selectedPage, setSelectedPage] = useState<ManageType>("info");
@@ -81,6 +85,19 @@ export default function MemberManage(props: MemberManageProps) {
     setSelectedModal("message");
     onOpen();
     console.log(`Send message to member ${id}`);
+  };
+
+  const requestSendMessageToMember = (id: number, message: string) => {
+    const data = createNoticeToMember({
+      memberId: id,
+      groupId: props.id,
+      title: `[${props.groupData?.name}]에서 메시지가 도착했습니다.`,
+      content: message,
+    });
+    data.then(() => {
+      alert("메시지가 전송되었습니다.");
+      setMessage("");
+    });
   };
 
   return (
@@ -237,15 +254,30 @@ export default function MemberManage(props: MemberManageProps) {
                             <textarea
                               className={styles.message_textarea}
                               placeholder="메시지를 입력해주세요."
+                              value={message}
+                              onChange={(e) => setMessage(e.target.value)}
                             ></textarea>
                           </>
                         )}
                       </ModalBody>
                       <ModalFooter>
-                        <Button color="secondary" onPress={onClose}>
+                        <Button
+                          color="secondary"
+                          onPress={onClose}
+                          onClick={() => setMessage("")}
+                        >
                           돌아가기
                         </Button>
-                        <Button color="primary" onPress={onClose}>
+                        <Button
+                          color="primary"
+                          onPress={onClose}
+                          onClick={() =>
+                            requestSendMessageToMember(
+                              selectedMember!.id,
+                              message!
+                            )
+                          }
+                        >
                           전송하기
                         </Button>
                       </ModalFooter>
