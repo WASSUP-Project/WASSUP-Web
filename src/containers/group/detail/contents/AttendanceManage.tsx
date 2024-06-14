@@ -52,36 +52,69 @@ export default function AttendanceManage(props: AttendanceManageProps) {
     setSearchKeyword(e.target.value);
   };
 
-  const requestUpdateAttendanceStatus = (memberId: number, status: string) => {
-    const data = updateAttendanceStatus({
+  const requestUpdateAttendanceStatus = async (
+    memberId: number,
+    status: string
+  ) => {
+    // 이전 상태 저장
+    const beforeMember = members.find((member) => member.memberId === memberId);
+    const beforeStatus = beforeMember?.status;
+
+    // UI 미리 변경
+    const updatedMembers = members.map((member) => {
+      if (member.memberId === memberId) {
+        return {
+          ...member,
+          status: status,
+        };
+      }
+      return member;
+    });
+    setMembers(updatedMembers as MemberWithAttendanceStatus[]);
+
+    // API 호출
+    const response = await updateAttendanceStatus({
       memberId: memberId,
       status: status,
     });
-    data.then(() => {
-      const updatedMembers = members.map((member) => {
+
+    // API 호출 실패 시 UI 원복
+    if (response.status !== 200) {
+      alert("출석 상태 변경에 실패했습니다.");
+      const restoredMembers = members.map((member) => {
         if (member.memberId === memberId) {
           return {
             ...member,
-            status: status,
+            status: beforeStatus,
           };
         }
         return member;
       });
-      setMembers(updatedMembers);
-    });
+      setMembers(restoredMembers as MemberWithAttendanceStatus[]);
+    }
   };
 
-  const requestUpdateAttendanceStatusAll = (status: number) => {
-    const data = updateAttendanceStatusAll(props.id, status);
-    data.then(() => {
-      const updatedMembers = members.map((member) => {
-        return {
-          ...member,
-          status: status === 0 ? "ATTENDANCE" : "LEAVING",
-        };
-      });
-      setMembers(updatedMembers);
+  const requestUpdateAttendanceStatusAll = async (status: number) => {
+    // 이전 상태 저장
+    const beforeMembers = members;
+
+    // UI 미리 변경
+    const updatedMembers = members.map((member) => {
+      return {
+        ...member,
+        status: status === 0 ? "ATTENDANCE" : "LEAVING",
+      };
     });
+    setMembers(updatedMembers);
+
+    // API 호출
+    const response = await updateAttendanceStatusAll(props.id, status);
+
+    // API 호출 실패 시 UI 원복
+    if (response.status !== 200) {
+      alert("출석 상태 변경에 실패했습니다.");
+      setMembers(beforeMembers);
+    }
   };
 
   const createButtonsByMemberStatus = (

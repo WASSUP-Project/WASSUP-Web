@@ -169,8 +169,10 @@ export const updateAttendanceStatus = async (data: RequestUpdateAttendanceStatus
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
             }
         });
+        return { status: 200 };
     } catch (error) {
         console.error(error);
+        return { status: 500 };
     }
 };
 
@@ -182,7 +184,9 @@ export const updateAttendanceStatusAll = async (groupId: number, status: number)
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
             }
         });
+        return { status: 200 };
     } catch (error) {
         console.error(error);
+        return { status: 500 };
     }
 };
