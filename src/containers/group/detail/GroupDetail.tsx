@@ -110,7 +110,7 @@ export default function GroupDetail() {
     <>
       {groupData ? (
         <div className={styles.container}>
-          <div>
+          <div className={styles.left_bar}>
             <h1 className={styles.group_title}>{groupData.name}</h1>
             <Listbox
               items={items}

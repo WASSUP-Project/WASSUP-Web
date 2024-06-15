@@ -129,9 +129,10 @@ export const deleteGroup = async (groupId: number) => {
                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
             },
         });
-        return response.status === 200;
+        return { status: 200 };
     } catch (error) {
         console.error(error);
+        return { status: 500 };
     }
 };
 
