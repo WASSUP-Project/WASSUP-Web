@@ -102,7 +102,7 @@ export default function CreateGroup() {
     const requestCreateGroup = {
       groupName: formik.values.groupName,
       groupDescription: formik.values.description,
-      address: formik.values.address,
+      address: formik.values.address + " " + formik.values.addressDetail,
       businessNumber: formik.values.businessNumber,
       email: formik.values.email,
       imageUrl: "groupDefault.png",
