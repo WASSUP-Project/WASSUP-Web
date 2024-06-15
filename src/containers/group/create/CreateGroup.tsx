@@ -105,7 +105,7 @@ export default function CreateGroup() {
       address: formik.values.address,
       businessNumber: formik.values.businessNumber,
       email: formik.values.email,
-      imageUrl: "defaultGroup.png",
+      imageUrl: "groupDefault.png",
     };
     const response = await createGroup(requestCreateGroup);
 
@@ -114,6 +114,7 @@ export default function CreateGroup() {
     } else {
       alert("그룹 생성에 실패했습니다.");
     }
+    window.location.href = "/group";
   };
 
   const requestCheckDuplicateGroupName = async () => {

@@ -139,10 +139,17 @@ export default function GroupManage(props: GroupManageProps) {
     alert("그룹 정보가 수정되었습니다.");
   };
 
-  const requestDeleteGroup = () => {
-    const response = deleteGroup(props.id);
+  const requestDeleteGroup = async () => {
+    if (!confirm("정말로 그룹을 삭제하시겠습니까?")) {
+      return;
+    }
+    const response = await deleteGroup(props.id);
     if (!response) {
       console.error("[Error] 그룹 정보 삭제 실패");
+    }
+    if (response.status === 200) {
+      alert("그룹이 삭제되었습니다.");
+      window.location.href = "/group";
     }
   };
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import styles from "./AttendanceManage.module.css";
-import { Pagination, Link, Button } from "@nextui-org/react";
+import { Pagination, Button } from "@nextui-org/react";
 import usePagination from "@/hooks/usePagination";
 import {
   AttendanceStatus,
