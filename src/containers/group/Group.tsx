@@ -46,8 +46,8 @@ export default function Group() {
           <Spacer height={5} />
 
           <div className={styles.group_container}>
-            {groups ? (
-              groups.map((group) => (
+            {groups?.length != 0 ? (
+              groups!.map((group) => (
                 <div key={group.id}>
                   <Link href={`/group/detail?id=${group.id}`}>
                     <GroupItem key={group.id} {...group} />
