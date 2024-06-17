@@ -110,14 +110,21 @@ export default function GroupManage(props: GroupManageProps) {
   };
 
   const uploadGroupImage = (imageFile: File | null) => {
+    // 이미지 파일이 없을 경우
     if (!imageFile) {
       return;
     }
-    const uploadFileName = uuid() + ".png";
+
+    // 이미지 파일 이름 생성 및 프리뷰 이미지 설정
+    const timestamp = new Date(Date.now()).toISOString();
+    const uniqueValue = uuid();
+    const uploadFileName = `${timestamp}_${uniqueValue}.png`;
     setImageName(uploadFileName);
+    setPreviewImage(imageFile);
+
+    // 이미지 업로드
     const imageRef = ref(firebaseStorage, uploadFileName);
     uploadBytes(imageRef, imageFile);
-    setPreviewImage(imageFile);
   };
 
   const requestUpdateGroup = async () => {
