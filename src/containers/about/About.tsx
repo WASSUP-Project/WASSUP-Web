@@ -60,8 +60,21 @@ export default function About() {
           </li>
           <li>출석이 완료되면 등록된 전화번호로 알림 메시지가 전송됩니다.</li>
           <li>출석률이나 미출석 인원을 관리 페이지에서 확인할 수 있습니다.</li>
+          <li>직접 출결 상태를 수정할 수 있습니다.</li>
+          <Image
+            src="/groupAttendancePad.png"
+            alt="Image of something relevant"
+            width={900}
+            height={450}
+          ></Image>
           <Image
             src="/groupAttendance.png"
+            alt="Image of something relevant"
+            width={900}
+            height={450}
+          ></Image>
+          <Image
+            src="/groupAttendanceManage.png"
             alt="Image of something relevant"
             width={900}
             height={450}
