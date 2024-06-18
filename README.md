@@ -14,17 +14,17 @@
 
 ## 📌 와썹 미리보기
 
-<img src="images/wassup_main.png" width="1000" height="820">
+<img src="images/wassup_main.png" width="830" height="670">
 
-<img src="images/wassup_group.png" width="1000" height="760">
+<img src="images/wassup_group.png" width="830" height="610">
 
-<img src="images/wassup_pad.png" width="1000" height="970">
+<img src="images/wassup_pad.png" width="830" height="780">
 
-<img src="public/groupAttendance.png" width="1000" height="770">
+<img src="public/groupAttendance.png" width="830" height="600">
 
-<img src="images/wassup_attendance.png" width="1000" height="770">
+<img src="images/wassup_attendance.png" width="830" height="610">
 
-<img src="public/groupNotice.png" width="1000" height="770">
+<img src="public/groupNotice.png" width="830" height="610">
 
 
 ## 📌 프로젝트 기간
